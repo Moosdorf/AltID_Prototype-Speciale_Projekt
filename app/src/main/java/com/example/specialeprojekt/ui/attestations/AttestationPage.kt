@@ -126,6 +126,7 @@ fun AttestationPage(navController: NavController) {
 
             QrCodeDisplay(selectedData.joinToString("|"))
 
+            Text("QR koden indenholder:")
             when (proof) {
                 is AldersBevis -> {
                     Text("Alder: ${proof.age}")
@@ -146,7 +147,6 @@ fun AttestationPage(navController: NavController) {
                 }
 
             }
-
 
         }
         Spacer(modifier = Modifier.height(20.dp))
