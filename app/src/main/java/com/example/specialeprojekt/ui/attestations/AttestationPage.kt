@@ -169,6 +169,11 @@ fun genQRCode(message: String, size: Int = 512): Bitmap { // returns Bitmap
 
 @Composable
 fun QrCodeDisplay(message: String) {
+    if (message.isBlank()) {
+        Text("No QR code available.")
+        return
+    }
+
     val qrBitmap = remember(message) { genQRCode(message) }
 
     Image(

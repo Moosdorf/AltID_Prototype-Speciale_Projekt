@@ -41,12 +41,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.specialeprojekt.R
 import com.example.specialeprojekt.data.AldersBevis
-import com.example.specialeprojekt.data.AttestationCardData
-import com.example.specialeprojekt.data.AttestationData
-import com.example.specialeprojekt.data.LegitimationsBevis
 import com.example.specialeprojekt.data.SundhedsKort
 import com.example.specialeprojekt.data.UserViewModel
 import com.example.specialeprojekt.ui.attestations.AttestationCard
+import com.example.specialeprojekt.ui.mitid.MitIDRequestViewModel
 import com.example.specialeprojekt.ui.navigation.Route
 import kotlinx.coroutines.launch
 
@@ -84,14 +82,7 @@ fun MainPage(navController: NavController) {
             ) {
                 Text("Ingen beviser tilføjet")
                 Spacer(modifier = Modifier.height(16.dp))
-                Row {
-                    Button(onClick = { showOptions = true }) {
-                        Text("Tilføj bevis")
-                    }
-                    Button(onClick = { }) {
-                        Text("Scan QR kode")
-                    }
-                }
+                ProofButtons(onAddAttestation = { showOptions = true }, navController)
             }
         } else {
             // carousel
@@ -141,14 +132,7 @@ fun MainPage(navController: NavController) {
 
 
             Spacer(modifier = Modifier.height(16.dp))
-            Row {
-                Button(onClick = { showOptions = true }) {
-                    Text("Tilføj bevis")
-                }
-                Button(onClick = { }) {
-                    Text("Scan QR kode")
-                }
-            }
+            ProofButtons(onAddAttestation = { showOptions = true }, navController)
         }
     }
 
@@ -161,7 +145,6 @@ fun MainPage(navController: NavController) {
                 Column {
                     listOf(
                         "Aldersbevis" to Icons.Filled.Cake,
-                        "Legitimationsbevis" to Icons.Filled.AccountBox,
                         "Sundhedskort" to Icons.Filled.CreditCard
                     ).filter { (name, _) ->
                         userModel.attestations.none { it.attestationType == name }
@@ -173,9 +156,6 @@ fun MainPage(navController: NavController) {
                                     // add only the clicked one
                                     when (name) {
                                         "Aldersbevis" -> userModel.addAttestation(AldersBevis())
-                                        "Legitimationsbevis" -> userModel.addAttestation(
-                                            LegitimationsBevis()
-                                        )
                                         "Sundhedskort" -> userModel.addAttestation(SundhedsKort())
                                     }
                                     showOptions = false
@@ -196,5 +176,34 @@ fun MainPage(navController: NavController) {
                 }
             }
         )
+    }
+}
+
+@Composable
+fun ProofButtons(onAddAttestation: () -> Unit, navController: NavController) {
+    val context = LocalContext.current
+    val mitIDRequestViewModel: MitIDRequestViewModel = viewModel(context as ComponentActivity)
+    val userModel: UserViewModel = viewModel(context)
+
+    Row {
+        if (userModel.attestations.isEmpty()) {
+            Button(onClick = {
+                mitIDRequestViewModel.path =  Route.Main.route
+                mitIDRequestViewModel.message = "Identifikationsbevis"
+                navController.navigate(Route.MitIDAuth.route)
+            }) {
+
+                Text("Tilføj identifikationsbevis")
+            }
+        }
+        else {
+            Button(onClick = { onAddAttestation() }) {
+                Text("Tilføj bevis")
+            }
+            Button(onClick = { navController.navigate(Route.QRScanner.route) }) {
+                Text("Scan QR kode")
+            }
+        }
+
     }
 }

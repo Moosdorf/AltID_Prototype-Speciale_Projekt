@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.specialeprojekt.data.UserViewModel
+import com.example.specialeprojekt.ui.mitid.MitIDRequestViewModel
 import com.example.specialeprojekt.ui.navigation.Route
 
 @Composable
@@ -31,6 +32,9 @@ fun LoginScreen(navController: NavController) {
     var username by remember { mutableStateOf("") }
     val context = LocalContext.current
     val userViewModel: UserViewModel = viewModel(context as ComponentActivity)
+
+
+    val mitIDRequestViewModel: MitIDRequestViewModel = viewModel(context)
 
     Column(
         modifier = Modifier
@@ -55,7 +59,11 @@ fun LoginScreen(navController: NavController) {
         Button(
             onClick = {
                 userViewModel.username = username
-                navController.navigate(Route.Main.route)
+                navController.navigate(Route.MitIDAuth.route) {
+                    mitIDRequestViewModel.path = Route.Main.route
+                    mitIDRequestViewModel.message = "Registrér AltID"
+                    popUpTo(0)
+                }
             },
             modifier = Modifier.fillMaxWidth()
         ) {
