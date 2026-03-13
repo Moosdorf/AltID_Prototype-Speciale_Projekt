@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.ArrowCircleLeft
 import androidx.compose.material.icons.filled.ArrowCircleRight
 import androidx.compose.material.icons.filled.Cake
@@ -34,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -52,9 +52,11 @@ import kotlinx.coroutines.launch
 fun MainPage(navController: NavController) {
     val context = LocalContext.current
     val userModel: UserViewModel = viewModel(context as ComponentActivity)
-    val pagerState = rememberPagerState(pageCount = { userModel.attestations.size })
+    val attestations = userModel.attestations.values.toList()
+    val pagerState = rememberPagerState(pageCount = { attestations.size })
     val scope = rememberCoroutineScope()
-    var showOptions by remember { mutableStateOf(false) }
+    var showAddProofOptions by remember { mutableStateOf(false) }
+    var showProofOptions by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -63,7 +65,7 @@ fun MainPage(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(32.dp))
-        MainPageHeader()
+        MainPageHeader({ if (attestations.isNotEmpty()) showAddProofOptions = true }, { showProofOptions = true })
         Image(
             painter = painterResource(R.drawable.userpic),
             contentDescription = "user image",
@@ -73,7 +75,8 @@ fun MainPage(navController: NavController) {
         Text(text = userModel.username)
         Spacer(modifier = Modifier.height(24.dp))
 
-        if (userModel.attestations.isEmpty()) {
+
+        if (attestations.isEmpty()) {
             // empty state
             Column(
                 modifier = Modifier.fillMaxWidth().weight(1f),
@@ -82,7 +85,7 @@ fun MainPage(navController: NavController) {
             ) {
                 Text("Ingen beviser tilføjet")
                 Spacer(modifier = Modifier.height(16.dp))
-                ProofButtons(onAddAttestation = { showOptions = true }, navController)
+                ProofButtons(onAddAttestation = { showAddProofOptions = true }, navController)
             }
         } else {
             // carousel
@@ -92,7 +95,7 @@ fun MainPage(navController: NavController) {
                 contentPadding = PaddingValues(horizontal = 60.dp),
                 pageSpacing = 5.dp
             ) { page ->
-                AttestationCard(userModel.attestations[page], navController)
+                AttestationCard(attestations[page], navController)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -115,7 +118,7 @@ fun MainPage(navController: NavController) {
                     })
 
                 Button(onClick = { navController.navigate(Route.Attestation.route) }) {
-                    Text(userModel.attestations[pagerState.currentPage].attestationType)
+                    Text(attestations[pagerState.currentPage].attestationType)
                 }
 
                 Icon(
@@ -132,52 +135,65 @@ fun MainPage(navController: NavController) {
 
 
             Spacer(modifier = Modifier.height(16.dp))
-            ProofButtons(onAddAttestation = { showOptions = true }, navController)
+            ProofButtons(onAddAttestation = { showAddProofOptions = true }, navController)
         }
     }
 
     // dialog outside the column
-    if (showOptions) {
-        AlertDialog(
-            onDismissRequest = { showOptions = false },
-            title = { Text("Vælg bevis") },
-            text = {
-                Column {
-                    listOf(
-                        "Aldersbevis" to Icons.Filled.Cake,
-                        "Sundhedskort" to Icons.Filled.CreditCard
-                    ).filter { (name, _) ->
-                        userModel.attestations.none { it.attestationType == name }
-                    }.forEach { (name, icon) ->
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    // add only the clicked one
-                                    when (name) {
-                                        "Aldersbevis" -> userModel.addAttestation(AldersBevis())
-                                        "Sundhedskort" -> userModel.addAttestation(SundhedsKort())
-                                    }
-                                    showOptions = false
+    if (showAddProofOptions) {
+        AddProofAlertBox { showAddProofOptions = false }
+    }
+
+}
+
+@Composable
+fun AddProofAlertBox(onDismiss: () -> Unit) {
+    val context = LocalContext.current
+    val userModel: UserViewModel = viewModel(context as ComponentActivity)
+    val attestations = userModel.attestations.values.toList()
+
+    AlertDialog(
+        onDismissRequest = { onDismiss() },
+        title = { Text("Vælg bevis") },
+        text = {
+            Column {
+                listOf(
+                    "Aldersbevis" to Icons.Filled.Cake,
+                    "Sundhedskort" to Icons.Filled.CreditCard
+                ).filter { (name, _) ->
+                    attestations.none { it.attestationType == name }
+                }.forEach { (name, icon) ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                // add only the clicked one
+                                when (name) {
+                                    "Aldersbevis" -> userModel.addAttestation(AldersBevis())
+                                    "Sundhedskort" -> userModel.addAttestation(SundhedsKort())
                                 }
-                                .padding(vertical = 12.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(imageVector = icon, contentDescription = null)
-                            Spacer(modifier = Modifier.width(12.dp))
-                            Text(name)
-                        }
+                                onDismiss()
+                            }
+                            .padding(vertical = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(imageVector = icon, contentDescription = null)
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Text(name)
                     }
                 }
-            },
-            confirmButton = {
-                Button(onClick = { showOptions = false }) {
-                    Text("Annuller")
-                }
             }
-        )
-    }
+        },
+        confirmButton = {
+            Button(onClick = { onDismiss() }) {
+                Text("Annuller")
+            }
+        }
+    )
 }
+
+
+
 
 @Composable
 fun ProofButtons(onAddAttestation: () -> Unit, navController: NavController) {
@@ -189,11 +205,11 @@ fun ProofButtons(onAddAttestation: () -> Unit, navController: NavController) {
         if (userModel.attestations.isEmpty()) {
             Button(onClick = {
                 mitIDRequestViewModel.path =  Route.Main.route
-                mitIDRequestViewModel.message = "Identifikationsbevis"
+                mitIDRequestViewModel.message = "Legitimationsbevis"
                 navController.navigate(Route.MitIDAuth.route)
             }) {
 
-                Text("Tilføj identifikationsbevis")
+                Text("Tilføj legitimationsbevis")
             }
         }
         else {
@@ -207,3 +223,4 @@ fun ProofButtons(onAddAttestation: () -> Unit, navController: NavController) {
 
     }
 }
+

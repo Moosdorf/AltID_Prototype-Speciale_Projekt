@@ -7,11 +7,13 @@ import androidx.compose.material.icons.filled.CreditCard
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import java.util.Date
+import kotlin.String
 
 abstract class AttestationData {
     abstract val attestationType: String
     abstract val icon : ImageVector
     abstract val backGroundColor : Color
+    abstract val attributes : Map<String, String>
 
 }
 
@@ -19,27 +21,45 @@ data class AldersBevis(
     override val attestationType: String = "Aldersbevis",
     val age : Int = 44,
     override val icon: ImageVector = Icons.Filled.Cake,
-    override val backGroundColor: Color = Color(0xFF28BD77)
+    override val backGroundColor: Color = Color(0xFF28BD77),
+    override val attributes: Map<String, String> = mapOf(
+        "Alder" to "44"
+    )
 ) : AttestationData()
 
 data class LegitimationsBevis(
-    override val attestationType: String = "Legitimationsbevis",
-    val firstName : String = "Jakob",
-    val lastName : String = "Smith",
-    val dateOfBirth : String = "16-2-1982",
-    val placeOfBirth : String = "Roskilde",
-    val nationality : String = "Dansk",
-    val address : String = "Nørrebrogade 42, 2200 København N",
     override val icon: ImageVector = Icons.Filled.AccountBox,
-    override val backGroundColor: Color = Color(0xFF337EDC)
+    override val backGroundColor: Color = Color(0xFF337EDC),
+    override val attestationType: String = "Legitimationsbevis",
+    override val attributes: Map<String, String> = mapOf(
+        "Fornavn" to "Jakob",
+        "Efternavn" to "Smith",
+        "Fødselsdato" to "16-2-1982",
+        "Fødselsted" to "Roskilde",
+        "Nationalitet" to "Dansk",
+        "Adresse" to "Nørrebrogade 42, 2200 København N",
+    )
 ) : AttestationData()
 
 data class SundhedsKort(
     override val attestationType: String = "Sundhedskort",
     val age : Int = 44,
     override val icon: ImageVector = Icons.Filled.CreditCard,
-    override val backGroundColor: Color = Color(0xFFFFC25D)
+    override val backGroundColor: Color = Color(0xFFFFC25D),
+    override val attributes: Map<String, String> = mapOf(
+        "Alder" to "44"
+    )
 ) : AttestationData()
 
 
+val attributesMap = mapOf(
+    "firstName" to "Fornavn",
+    "lastName" to "Efternavn",
+    "dateOfBirth" to "Fødselsdato",
+    "placeOfBirth" to "Fødselsted",
+    "nationality" to "Nationalitet",
+    "address" to "Adresse",
+    "attestationType" to "Bevistype",
+    "age" to "Alder"
+)
 

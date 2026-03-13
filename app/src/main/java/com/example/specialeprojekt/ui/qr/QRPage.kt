@@ -7,17 +7,29 @@ import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -41,13 +53,14 @@ fun QRPage(navController: NavController) {
     val context = LocalContext.current
     val qRModel: QRData = viewModel(context as ComponentActivity)
 
+    var qrScanned by remember { mutableStateOf(false) }
+
 
 
 
     LaunchedEffect(Unit) {
         permissionState.launchPermissionRequest()
     }
-
     Box(modifier = Modifier.fillMaxSize()) {
         if (permissionState.status.isGranted) {
             AndroidView(
@@ -62,6 +75,7 @@ fun QRPage(navController: NavController) {
                         }
                         val analyzer = ImageAnalysis.Builder().build().also {
                             it.setAnalyzer(Executors.newSingleThreadExecutor(), ImageAnalyser({ e ->
+                                qrScanned = true
                                 navController.navigate(Route.Request.route)
                                 qRModel.QRString = e
                         }))
@@ -75,12 +89,38 @@ fun QRPage(navController: NavController) {
                 },
                 modifier = Modifier.fillMaxSize()
             )
+            val scanBoxSize = 250.dp
 
-            Spacer(modifier = Modifier.height(32.dp))
+            // Dark overlay with a transparent hole in the middle
+            Canvas(modifier = Modifier.fillMaxSize()) {
+                val boxPx = scanBoxSize.toPx()
+                val left = (size.width - boxPx) / 2
+                val top = (size.height - boxPx) / 2
+
+                // Dark overlay
+                drawRect(color = Color(0x99000000))
+
+                // Cut out the center square
+                drawRect(
+                    color = Color.Transparent,
+                    topLeft = Offset(left, top),
+                    size = Size(boxPx, boxPx),
+                    blendMode = BlendMode.Clear
+                )
+            }
+
+            // Border around the scan box
+            Box(
+                modifier = Modifier
+                    .size(scanBoxSize)
+                    .align(Alignment.Center)
+                    .border(2.dp, if (qrScanned) Color.Green else Color.Red, RectangleShape)
+            )
 
             Text(
-                text = "Scan QR kode: ",
-                modifier = Modifier.align(Alignment.TopCenter).padding(16.dp)
+                text = "Scan QR kode",
+                modifier = Modifier.align(Alignment.TopCenter).padding(top = 100.dp),
+                color = Color.White
             )
 
             Button(

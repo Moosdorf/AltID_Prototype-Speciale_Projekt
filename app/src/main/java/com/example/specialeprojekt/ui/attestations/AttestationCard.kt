@@ -44,6 +44,7 @@ fun AttestationCard(data: AttestationData, navController: NavController) {
             .width(250.dp)
             .background(data.backGroundColor, RoundedCornerShape(12.dp))
             .padding(12.dp)) {
+
             Text(data.attestationType, color = Color.White)
 
             Icon(imageVector = data.icon,

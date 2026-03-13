@@ -8,12 +8,11 @@ import com.google.gson.Gson
 
 class UserViewModel : ViewModel() {
     var username by mutableStateOf("")
-    var attestations by mutableStateOf(listOf<AttestationData>())
-
+    var attestations by mutableStateOf<Map<String, AttestationData>>(mapOf())
 
     fun addAttestation(attestation: AttestationData) {
-        if (attestations.contains(attestation)) return;
+        if (attestations.values.contains(attestation)) return
 
-        attestations = attestations + attestation
+        attestations = attestations + (attestation.attestationType to attestation)
     }
 }

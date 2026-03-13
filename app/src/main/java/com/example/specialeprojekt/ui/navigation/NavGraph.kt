@@ -28,9 +28,7 @@ fun NavGraph() {
         composable(Route.Login.route) { LoginScreen(navController) }
         composable(Route.Main.route) { MainPage(navController) }
         composable(Route.Attestation.route) { AttestationPage(navController) }
-        composable(Route.QRScanner.route) {
-            var scannedResult by remember { mutableStateOf<String?>(null) }
-            QRPage(navController) }
+        composable(Route.QRScanner.route) { QRPage(navController) }
         composable(Route.Request.route) { RequestPage(navController) }
         composable(Route.MitIDAuth.route) { MitIDAuthorize(navController) }
 

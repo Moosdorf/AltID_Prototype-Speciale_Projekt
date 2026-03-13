@@ -1,9 +1,12 @@
 package com.example.specialeprojekt.ui.home
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
@@ -18,10 +21,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.specialeprojekt.R
 
 @Composable
-fun MainPageHeader() {
+fun MainPageHeader(addProof: () -> Unit, showProof: () -> Unit) {
     Surface(color = MaterialTheme.colorScheme.surface) {
         Row(
             modifier = Modifier
@@ -32,10 +37,10 @@ fun MainPageHeader() {
         ) {
             // Left side - logo + title
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = Icons.Filled.Home,
-                    contentDescription = "logo",
-                    tint = Color.Black
+                Image(
+                    painter = painterResource(R.drawable.digst),
+                    contentDescription = "digst logo",
+                    modifier = Modifier.height(20.dp).width(20.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text("AltID")
@@ -44,12 +49,18 @@ fun MainPageHeader() {
             // Right side - action icons
             Row {
                 Icon(
+                    modifier = Modifier.clickable {
+                        addProof()
+                    },
                     imageVector = Icons.Filled.AddCircle,
                     contentDescription = "Add",
                     tint = Color.Black
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 Icon(
+                    modifier = Modifier.clickable {
+                        showProof()
+                    },
                     imageVector = Icons.Filled.Menu,
                     contentDescription = "Menu",
                     tint = Color.Black

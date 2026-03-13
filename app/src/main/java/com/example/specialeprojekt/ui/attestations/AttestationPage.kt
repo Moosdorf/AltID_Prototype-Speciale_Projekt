@@ -10,6 +10,7 @@ import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,9 +21,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -56,14 +60,27 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.set
+import com.example.specialeprojekt.data.attributesMap
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AttestationPage(navController: NavController) {
     val context = LocalContext.current
     val data: AttestationPageViewModel = viewModel(context as ComponentActivity)
-    val userData: UserViewModel = viewModel(context as ComponentActivity)
-    var selectedData: List<String> = listOf();
+    val userData: UserViewModel = viewModel(context)
+
+    val attestation = data.selectedAttestation
+    val allData: Map<String, String> = attestation?.attributes ?: mapOf()
+
+    var selectedKeys by remember(attestation) {
+        mutableStateOf(allData.keys.toSet())
+    }
+
+    val qrData = allData
+        .filter { (k, _) -> k in selectedKeys } // remove all non selected keys
+        .values // make a list of values
+        .joinToString("|") // join keys together
+
 
     Column(
         modifier = Modifier
@@ -106,52 +123,58 @@ fun AttestationPage(navController: NavController) {
             Text(currentTime, color = data.selectedAttestation?.backGroundColor ?: Color.White)
         }
         Spacer(modifier = Modifier.height(20.dp))
-        val proof = data.selectedAttestation
+        val attestation = data.selectedAttestation
+
         Column(Modifier.background(Color.White, RoundedCornerShape(10.dp))
-            .height(500.dp)
+            .height(550.dp)
             .width(300.dp)
             .padding(10.dp)) {
 
-            when (proof) {
-                is AldersBevis -> {
-                    selectedData = selectedData + proof.age.toString()
-                }
-                is LegitimationsBevis -> {
-                    selectedData = selectedData + proof.firstName + proof.lastName + proof.dateOfBirth + proof.placeOfBirth + proof.nationality + proof.address
-                }
-                is SundhedsKort -> {
-                    selectedData = selectedData + proof.age.toString()
-                }
-            }
+            QrCodeDisplay(qrData)
 
-            QrCodeDisplay(selectedData.joinToString("|"))
+            Text("QR koden indeholder:")
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
+            ) {
+                if (attestation != null) {
+                    for (attr in allData.keys) {
+                        val displayName = attributesMap[attr] ?: attr
+                        val isChecked = attr in selectedKeys
+                        val value = if (isChecked) attestation.attributes[attr] else ""
 
-            Text("QR koden indenholder:")
-            when (proof) {
-                is AldersBevis -> {
-                    Text("Alder: ${proof.age}")
-                    selectedData = selectedData + proof.age.toString()
-                }
-                is LegitimationsBevis -> {
-                    Text("Navn: ${proof.firstName} ${proof.lastName}")
-                    Text("Fødselsdato: ${proof.dateOfBirth}")
-                    Text("Fødested: ${proof.placeOfBirth}")
-                    Text("Nationalitet: ${proof.nationality}")
-                    Text("Adresse: ${proof.address}")
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    selectedKeys = if (isChecked)
+                                        selectedKeys - attr
+                                    else
+                                        selectedKeys + attr
+                                }
+                                .padding(vertical = 4.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Checkbox(
+                                checked = isChecked,
+                                onCheckedChange = { checked ->
+                                    selectedKeys = if (checked)
+                                        selectedKeys + attr
+                                    else
+                                        selectedKeys - attr
+                                }
+                            )
 
-                    selectedData = selectedData + proof.firstName + proof.lastName + proof.dateOfBirth + proof.placeOfBirth + proof.nationality + proof.address
-                }
-                is SundhedsKort -> {
-                    Text("Alder: ${proof.age}")
-                    selectedData = selectedData + proof.age.toString()
-                }
+                            Text("$displayName: $value")
+                        }
 
+                    }
+                }
             }
 
         }
-        Spacer(modifier = Modifier.height(20.dp))
 
-        Button(onClick = {}) {Text("Vælg hvad du vil dele")}
     }
 }
 
