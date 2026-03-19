@@ -42,14 +42,13 @@ import com.google.gson.Gson
 fun RequestPage(navController: NavController) {
     val context = LocalContext.current
     val userModel: UserViewModel = viewModel(context as ComponentActivity)
-    val qRModel: QRData = viewModel(context as ComponentActivity)
+    val qRModel: QRData = viewModel(context)
     val data = "" + qRModel.QRString
 
     val request = Gson().fromJson(data, RequestData::class.java)
     var isShared by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
-        // Header at the top
         Box(
             modifier = Modifier
                 .align(Alignment.TopCenter)
@@ -58,7 +57,7 @@ fun RequestPage(navController: NavController) {
             RequestHeader(navController, isShared)
         }
 
-        // Main content in the center
+
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,

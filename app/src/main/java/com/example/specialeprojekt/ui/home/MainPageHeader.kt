@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -35,7 +34,7 @@ fun MainPageHeader(addProof: () -> Unit, showProof: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            // Left side - logo + title
+            // Left side
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
                     painter = painterResource(R.drawable.digst),
@@ -46,7 +45,7 @@ fun MainPageHeader(addProof: () -> Unit, showProof: () -> Unit) {
                 Text("AltID")
             }
 
-            // Right side - action icons
+            // Right side
             Row {
                 Icon(
                     modifier = Modifier.clickable {

@@ -33,7 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -41,23 +41,25 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.specialeprojekt.R
 import com.example.specialeprojekt.data.AldersBevis
+import com.example.specialeprojekt.data.LegitimationsBevis
 import com.example.specialeprojekt.data.SundhedsKort
 import com.example.specialeprojekt.data.UserViewModel
 import com.example.specialeprojekt.ui.attestations.AttestationCard
 import com.example.specialeprojekt.ui.mitid.MitIDRequestViewModel
 import com.example.specialeprojekt.ui.navigation.Route
+import com.example.specialeprojekt.ui.passport.PassportDataViewModel
 import kotlinx.coroutines.launch
 
 @Composable
 fun MainPage(navController: NavController) {
     val context = LocalContext.current
-    val userModel: UserViewModel = viewModel(context as ComponentActivity)
+    val activity = context as ComponentActivity
+    val userModel: UserViewModel = viewModel(activity)
     val attestations = userModel.attestations.values.toList()
     val pagerState = rememberPagerState(pageCount = { attestations.size })
     val scope = rememberCoroutineScope()
     var showAddProofOptions by remember { mutableStateOf(false) }
     var showProofOptions by remember { mutableStateOf(false) }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -66,11 +68,8 @@ fun MainPage(navController: NavController) {
     ) {
         Spacer(modifier = Modifier.height(32.dp))
         MainPageHeader({ if (attestations.isNotEmpty()) showAddProofOptions = true }, { showProofOptions = true })
-        Image(
-            painter = painterResource(R.drawable.userpic),
-            contentDescription = "user image",
-            modifier = Modifier.height(100.dp).width(100.dp)
-        )
+
+        PassportImage(navController)
         Spacer(modifier = Modifier.height(32.dp))
         Text(text = userModel.username)
         Spacer(modifier = Modifier.height(24.dp))
@@ -147,6 +146,29 @@ fun MainPage(navController: NavController) {
 }
 
 @Composable
+fun PassportImage(navController: NavController) {
+    val context = LocalContext.current
+    val activity = context as ComponentActivity
+    val passportModel: PassportDataViewModel = viewModel(activity)
+    val bitmap = passportModel.passportPhoto
+
+    if (bitmap != null) {
+        Image(
+            bitmap = bitmap.asImageBitmap(),
+            contentDescription = "user image",
+            modifier = Modifier.height(100.dp).width(100.dp)
+        )
+    } else {
+        Image(
+            painter = painterResource(R.drawable.userpic),
+            contentDescription = "user image",
+            modifier = Modifier.height(100.dp).width(100.dp)
+                .clickable { navController.navigate(Route.NFCScan.route) }
+        )
+    }
+}
+
+@Composable
 fun AddProofAlertBox(onDismiss: () -> Unit) {
     val context = LocalContext.current
     val userModel: UserViewModel = viewModel(context as ComponentActivity)
@@ -204,9 +226,10 @@ fun ProofButtons(onAddAttestation: () -> Unit, navController: NavController) {
     Row {
         if (userModel.attestations.isEmpty()) {
             Button(onClick = {
-                mitIDRequestViewModel.path =  Route.Main.route
+                /*mitIDRequestViewModel.path =  Route.Main.route
                 mitIDRequestViewModel.message = "Legitimationsbevis"
-                navController.navigate(Route.MitIDAuth.route)
+                navController.navigate(Route.MitIDAuth.route)*/
+                userModel.addAttestation(LegitimationsBevis())
             }) {
 
                 Text("Tilføj legitimationsbevis")

@@ -1,16 +1,9 @@
 package com.example.specialeprojekt.ui.attestations
 
-import android.content.Context.WINDOW_SERVICE
-import android.graphics.Bitmap
-import android.graphics.Point
 import android.os.Build
-import android.view.Display
-import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,14 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -37,49 +22,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.specialeprojekt.R
-import com.example.specialeprojekt.data.AldersBevis
-import com.example.specialeprojekt.data.AttestationData
-import com.example.specialeprojekt.data.LegitimationsBevis
-import com.example.specialeprojekt.data.SundhedsKort
-import com.example.specialeprojekt.data.UserViewModel
 import com.example.specialeprojekt.ui.home.AttestationPageHeader
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.MultiFormatWriter
-import com.google.zxing.qrcode.QRCodeWriter
 import kotlinx.coroutines.delay
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import androidx.core.graphics.createBitmap
-import androidx.core.graphics.set
-import com.example.specialeprojekt.data.attributesMap
+import com.example.specialeprojekt.ui.home.PassportImage
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AttestationPage(navController: NavController) {
     val context = LocalContext.current
     val data: AttestationPageViewModel = viewModel(context as ComponentActivity)
-    val userData: UserViewModel = viewModel(context)
 
-    val attestation = data.selectedAttestation
-    val allData: Map<String, String> = attestation?.attributes ?: mapOf()
-
-    var selectedKeys by remember(attestation) {
-        mutableStateOf(allData.keys.toSet())
-    }
-
-    val qrData = allData
-        .filter { (k, _) -> k in selectedKeys } // remove all non selected keys
-        .values // make a list of values
-        .joinToString("|") // join keys together
 
 
     Column(
@@ -99,8 +57,6 @@ fun AttestationPage(navController: NavController) {
             .padding(horizontal = 16.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween) {
-            val now = LocalDateTime.now()
-            val formatted = now.format(DateTimeFormatter.ofPattern("HH:mm:ss"))
 
             LaunchedEffect(Unit) {
                 while (true) {
@@ -112,96 +68,24 @@ fun AttestationPage(navController: NavController) {
 
             Text(currentTime)
 
-            Image(painter = painterResource(R.drawable.userpic),
-                contentDescription = "user image",
-                modifier = Modifier
-                    .height(100.dp)
-                    .width(100.dp)
-            )
+            PassportImage(navController)
+
 
             // this will be invisible, used for structure with SpaceBetween in Row.
             Text(currentTime, color = data.selectedAttestation?.backGroundColor ?: Color.White)
         }
+
+        Text("Showing: " + data.selectedAttestation?.attestationType)
+
         Spacer(modifier = Modifier.height(20.dp))
-        val attestation = data.selectedAttestation
 
-        Column(Modifier.background(Color.White, RoundedCornerShape(10.dp))
-            .height(550.dp)
-            .width(300.dp)
-            .padding(10.dp)) {
 
-            QrCodeDisplay(qrData)
-
-            Text("QR koden indeholder:")
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
-            ) {
-                if (attestation != null) {
-                    for (attr in allData.keys) {
-                        val displayName = attributesMap[attr] ?: attr
-                        val isChecked = attr in selectedKeys
-                        val value = if (isChecked) attestation.attributes[attr] else ""
-
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    selectedKeys = if (isChecked)
-                                        selectedKeys - attr
-                                    else
-                                        selectedKeys + attr
-                                }
-                                .padding(vertical = 4.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Checkbox(
-                                checked = isChecked,
-                                onCheckedChange = { checked ->
-                                    selectedKeys = if (checked)
-                                        selectedKeys + attr
-                                    else
-                                        selectedKeys - attr
-                                }
-                            )
-
-                            Text("$displayName: $value")
-                        }
-
-                    }
-                }
-            }
-
+        when (data.selectedAttestation?.attestationType) {
+            "Aldersbevis" -> AldersBevisComp()
+            "Legitimationsbevis" -> LegitimationsBevisComp()
         }
 
     }
-}
 
-// https://www.geeksforgeeks.org/kotlin/generate-qr-code-in-android-using-kotlin/
 
-fun genQRCode(message: String, size: Int = 512): Bitmap { // returns Bitmap
-    val bitMatrix = MultiFormatWriter().encode(message, BarcodeFormat.QR_CODE, size, size)
-    val bitmap = createBitmap(size, size, Bitmap.Config.RGB_565)
-    for (x in 0 until size)
-        for (y in 0 until size)
-            bitmap[x, y] =
-                if (bitMatrix[x, y]) android.graphics.Color.BLACK else android.graphics.Color.WHITE
-    return bitmap
-}
-
-@Composable
-fun QrCodeDisplay(message: String) {
-    if (message.isBlank()) {
-        Text("No QR code available.")
-        return
-    }
-
-    val qrBitmap = remember(message) { genQRCode(message) }
-
-    Image(
-        painter = BitmapPainter(qrBitmap.asImageBitmap()),
-        contentDescription = "QR Code",
-        modifier = Modifier.size(300.dp)
-    )
 }

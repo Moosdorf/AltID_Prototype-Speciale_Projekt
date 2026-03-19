@@ -7,5 +7,6 @@ sealed class Route(val route: String) {
     object QRScanner : Route("qrscan")
     object Request : Route("request")
     object MitIDAuth : Route("mitid")
+    object NFCScan : Route("nfcscan")
 
 }

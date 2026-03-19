@@ -38,7 +38,7 @@ fun RequestHeader(navController: NavController, isShared: Boolean) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            // Left side - logo + title
+            // Left side
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
                     painter = painterResource(R.drawable.digst),
@@ -49,7 +49,7 @@ fun RequestHeader(navController: NavController, isShared: Boolean) {
                 Text("AltID")
             }
 
-            // Right side - actions
+            // Right side
             Row {
                 // cancel button
                 if (!isShared) {
