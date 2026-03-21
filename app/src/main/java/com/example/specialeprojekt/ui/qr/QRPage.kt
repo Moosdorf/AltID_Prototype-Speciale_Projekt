@@ -1,6 +1,5 @@
 package com.example.specialeprojekt.ui.qr
 
-import ImageAnalyser
 import androidx.activity.ComponentActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis

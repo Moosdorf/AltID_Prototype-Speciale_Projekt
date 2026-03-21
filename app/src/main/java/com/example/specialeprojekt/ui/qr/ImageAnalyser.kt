@@ -1,3 +1,5 @@
+package com.example.specialeprojekt.ui.qr
+
 import androidx.annotation.OptIn
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis

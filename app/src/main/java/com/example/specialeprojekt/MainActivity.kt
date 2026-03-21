@@ -46,6 +46,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
+        setIntent(intent)
         if (intent.action == NfcAdapter.ACTION_TAG_DISCOVERED) {
             val tag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 intent.getParcelableExtra(NfcAdapter.EXTRA_TAG, Tag::class.java)
@@ -77,8 +78,6 @@ class MainActivity : ComponentActivity() {
                 )
                 service.open()
 
-                val bacKey = BACKey("214818881", "980220", "330710")
-
                 try {
                     val cardAccessFile =
                         CardAccessFile(service.getInputStream(PassportService.EF_CARD_ACCESS))
@@ -87,7 +86,7 @@ class MainActivity : ComponentActivity() {
                         .firstOrNull()
                     if (paceInfo != null) {
                         @Suppress("DEPRECATION")
-                        service.doPACE(bacKey, paceInfo.objectIdentifier, PACEInfo.toParameterSpec(paceInfo.parameterId))
+                        service.doPACE(viewModel.bacKey, paceInfo.objectIdentifier, PACEInfo.toParameterSpec(paceInfo.parameterId))
                         Log.d("PASSPORT", "PACE done")
                     } else {
                         Log.e("PASSPORT", "No PACE info found")

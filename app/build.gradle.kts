@@ -67,6 +67,7 @@ dependencies {
     implementation ("com.google.code.gson:gson:2.13.2")
     implementation("androidx.activity:activity-ktx:1.9.0")
     implementation("com.github.mhshams:jnbis:2.0.2")
+    implementation("com.github.commandiron:WheelPickerCompose:1.1.11")
     implementation(libs.androidx.camera.core)
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.foundation.layout)
