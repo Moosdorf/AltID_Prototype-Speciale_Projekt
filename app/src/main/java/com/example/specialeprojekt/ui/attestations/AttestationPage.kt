@@ -26,6 +26,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.specialeprojekt.data.SelectableAttribute
 import com.example.specialeprojekt.ui.home.AttestationPageHeader
 import kotlinx.coroutines.delay
 import java.time.LocalDateTime
@@ -86,4 +87,19 @@ fun AttestationPage(navController: NavController) {
     }
 
 
+}
+
+fun convertProofToJSON(selectableAttributes: List<SelectableAttribute>, proofType: String): String {
+    val json = buildString {
+        append("{\"attestationType\": \"${proofType}\",")
+        append("\"selectedAttributes\": {")
+        val selected = selectableAttributes.filter { it.isSelected }
+        selected.forEachIndexed { index, attr ->
+            append("\"${attr.key}\": \"${attr.value}\"")
+            if (index < selected.lastIndex) append(",")
+        }
+        append("}}")
+    }
+
+    return json
 }

@@ -57,7 +57,7 @@ fun AldersBevisComp() {
 
     // dialog outside the column
     if (showSelectAttributes ) {
-        SelectAttributes({ showSelectAttributes = false }, agesEligible, agePlus)
+        SelectAttributesComposable({ showSelectAttributes = false }, agesEligible, agePlus)
     }
 
 
@@ -102,7 +102,7 @@ fun AldersBevisComp() {
 }
 
 @Composable
-fun SelectAttributes(onDismiss: () -> Unit, attributes: Map<Int, Boolean>, agePlus: MutableIntState) {
+fun SelectAttributesComposable(onDismiss: () -> Unit, attributes: Map<Int, Boolean>, agePlus: MutableIntState) {
     AlertDialog(
         onDismissRequest = { onDismiss() },
         title = { Text("Vælg attribut") },

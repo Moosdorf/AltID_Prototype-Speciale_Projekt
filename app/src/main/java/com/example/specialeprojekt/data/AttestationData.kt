@@ -41,16 +41,11 @@ data class LegitimationsBevis(
     )
 ) : AttestationData()
 
-data class SundhedsKort(
-    override val attestationType: String = "Sundhedskort",
-    val age : Int = 44,
-    override val icon: ImageVector = Icons.Filled.CreditCard,
-    override val backGroundColor: Color = Color(0xFFFFC25D),
-    override val attributes: Map<String, String> = mapOf(
-        "Alder" to "44"
-    )
-) : AttestationData()
-
+data class SelectableAttribute(
+    val key: String,
+    val value: String,
+    var isSelected: Boolean = true
+)
 
 val attributesMap = mapOf(
     "firstName" to "Fornavn",

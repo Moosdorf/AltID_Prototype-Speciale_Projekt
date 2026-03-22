@@ -41,7 +41,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.specialeprojekt.R
 import com.example.specialeprojekt.data.AldersBevis
-import com.example.specialeprojekt.data.SundhedsKort
 import com.example.specialeprojekt.data.UserViewModel
 import com.example.specialeprojekt.ui.attestations.AttestationCard
 import com.example.specialeprojekt.ui.mitid.MitIDRequestViewModel
@@ -223,7 +222,6 @@ fun AddProofAlertBox(onDismiss: () -> Unit) {
             Column {
                 listOf(
                     "Aldersbevis" to Icons.Filled.Cake,
-                    "Sundhedskort" to Icons.Filled.CreditCard
                 ).filter { (name, _) ->
                     attestations.none { it.attestationType == name }
                 }.forEach { (name, icon) ->
@@ -234,7 +232,6 @@ fun AddProofAlertBox(onDismiss: () -> Unit) {
                                 // add only the clicked one
                                 when (name) {
                                     "Aldersbevis" -> userModel.addAttestation(AldersBevis())
-                                    "Sundhedskort" -> userModel.addAttestation(SundhedsKort())
                                 }
                                 onDismiss()
                             }
@@ -277,7 +274,8 @@ fun ProofButtons(onAddAttestation: () -> Unit, navController: NavController) {
             }
         }
         else {
-            Button(onClick = { onAddAttestation() }) {
+            Button(onClick = { onAddAttestation() },
+                enabled = userModel.attestations.keys.size < 2) {
                 Text("Tilføj bevis")
             }
             Button(onClick = { navController.navigate(Route.QRScanner.route) }) {

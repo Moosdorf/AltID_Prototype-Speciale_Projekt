@@ -1,5 +1,6 @@
 package com.example.specialeprojekt.ui.home
 
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,13 +21,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.specialeprojekt.R
 import com.example.specialeprojekt.data.LegitimationsBevis
+import com.example.specialeprojekt.data.UserViewModel
+import com.example.specialeprojekt.ui.passport.PassportDataViewModel
 
 @Composable
 fun MainPageHeader(legitimationsBevisAdded: Boolean, addProof: () -> Unit, showMenu: () -> Unit) {
+    val context = LocalContext.current
+    val activity = context as ComponentActivity
+    val passportData: PassportDataViewModel = viewModel(activity)
+    val userData: UserViewModel = viewModel(activity)
     Surface(color = Color(0xFFFFFBFE)) {
         Row(
             modifier = Modifier
@@ -51,6 +60,7 @@ fun MainPageHeader(legitimationsBevisAdded: Boolean, addProof: () -> Unit, showM
                 if (legitimationsBevisAdded) {
                     Icon(
                         modifier = Modifier.clickable {
+                        if (userData.attestations.keys.size < 2)
                             addProof()
                         },
                         imageVector = Icons.Filled.AddCircle,
@@ -62,7 +72,7 @@ fun MainPageHeader(legitimationsBevisAdded: Boolean, addProof: () -> Unit, showM
                 Spacer(modifier = Modifier.width(12.dp))
                 Icon(
                     modifier = Modifier.clickable {
-                        showMenu()
+                        if (passportData.passportPhoto == null)                                               showMenu()
                     },
                     imageVector = Icons.Filled.Menu,
                     contentDescription = "Menu",

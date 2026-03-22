@@ -59,7 +59,7 @@ fun LoginScreen(navController: NavController) {
             modifier = Modifier.height(200.dp).width(200.dp)
         )
 
-        Text("AltID", fontSize = 24.sp)
+        Text("Opret AltID konto", fontSize = 24.sp)
 
         Spacer(modifier = Modifier.height(32.dp))
 
