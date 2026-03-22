@@ -41,7 +41,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.specialeprojekt.R
 import com.example.specialeprojekt.data.AldersBevis
-import com.example.specialeprojekt.data.LegitimationsBevis
 import com.example.specialeprojekt.data.SundhedsKort
 import com.example.specialeprojekt.data.UserViewModel
 import com.example.specialeprojekt.ui.attestations.AttestationCard
@@ -59,7 +58,8 @@ fun MainPage(navController: NavController) {
     val pagerState = rememberPagerState(pageCount = { attestations.size })
     val scope = rememberCoroutineScope()
     var showAddProofOptions by remember { mutableStateOf(false) }
-    var showProofOptions by remember { mutableStateOf(false) }
+    var showMenu by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -67,7 +67,7 @@ fun MainPage(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(32.dp))
-        MainPageHeader({ if (attestations.isNotEmpty()) showAddProofOptions = true }, { showProofOptions = true })
+        MainPageHeader(attestations.isNotEmpty(), { showAddProofOptions = true }, { showMenu = true })
 
         PassportImage(navController)
         Spacer(modifier = Modifier.height(32.dp))
@@ -138,9 +138,12 @@ fun MainPage(navController: NavController) {
         }
     }
 
-    // dialog outside the column
+
     if (showAddProofOptions) {
         AddProofAlertBox { showAddProofOptions = false }
+    }
+    if (showMenu) {
+        ShowMenuAlertBox({ showMenu = false }, navController)
     }
 
 }
@@ -167,6 +170,45 @@ fun PassportImage(navController: NavController) {
         )
     }
 }
+
+@Composable
+fun ShowMenuAlertBox(onDismiss: () -> Unit, navController: NavController) {
+
+    AlertDialog(
+        onDismissRequest = { onDismiss() },
+        title = { Text("Settings") },
+        text = {
+            Column {
+                listOf(
+                    "Scan pas" to Icons.Filled.CreditCard
+                ).forEach { (name, icon) ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                when (name) {
+                                    "Scan pas" -> navController.navigate(Route.NFCScan.route)
+                                }
+                                onDismiss()
+                            }
+                            .padding(vertical = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(imageVector = icon, contentDescription = null)
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Text(name)
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            Button(onClick = { onDismiss() }) {
+                Text("Annuller")
+            }
+        }
+    )
+}
+
 
 @Composable
 fun AddProofAlertBox(onDismiss: () -> Unit) {
@@ -226,10 +268,9 @@ fun ProofButtons(onAddAttestation: () -> Unit, navController: NavController) {
     Row {
         if (userModel.attestations.isEmpty()) {
             Button(onClick = {
-                /*mitIDRequestViewModel.path =  Route.Main.route
+                mitIDRequestViewModel.path =  Route.Main.route
                 mitIDRequestViewModel.message = "Legitimationsbevis"
-                navController.navigate(Route.MitIDAuth.route)*/
-                userModel.addAttestation(LegitimationsBevis())
+                navController.navigate(Route.MitIDAuth.route)
             }) {
 
                 Text("Tilføj legitimationsbevis")

@@ -20,7 +20,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.sf.scuba.smartcards.CardService
-import org.jmrtd.BACKey
 import org.jmrtd.PassportService
 import org.jmrtd.lds.CardAccessFile
 import org.jmrtd.lds.PACEInfo
@@ -28,11 +27,12 @@ import org.jmrtd.lds.icao.DG1File
 import org.jmrtd.lds.icao.DG2File
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import com.example.specialeprojekt.ui.passport.States
 import java.io.DataInputStream
 import java.io.IOException
 
 class MainActivity : ComponentActivity() {
-    private val viewModel: PassportDataViewModel by viewModels()
+    private val passportData: PassportDataViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,9 +63,10 @@ class MainActivity : ComponentActivity() {
             try {
                 val isoDep = IsoDep.get(tag)
                 isoDep.connect()
-                isoDep.timeout = 30000
+                isoDep.timeout = 15000
                 Log.d("PASSPORT", "Connected to tag")
-                viewModel.tagConnected = true
+                passportData.failed = false
+                passportData.tagConnected = true
 
                 val cardService = CardService.getInstance(isoDep)
                 cardService.open()
@@ -86,15 +87,19 @@ class MainActivity : ComponentActivity() {
                         .firstOrNull()
                     if (paceInfo != null) {
                         @Suppress("DEPRECATION")
-                        service.doPACE(viewModel.bacKey, paceInfo.objectIdentifier, PACEInfo.toParameterSpec(paceInfo.parameterId))
+                        service.doPACE(passportData.bacKey, paceInfo.objectIdentifier, PACEInfo.toParameterSpec(paceInfo.parameterId))
                         Log.d("PASSPORT", "PACE done")
                     } else {
                         Log.e("PASSPORT", "No PACE info found")
-                        viewModel.tagConnected = false
+                        passportData.tagConnected = false
                         return@launch
                     }
                 } catch (e2: Exception) {
                     Log.e("PASSPORT", "PACE also failed: ${e2.message}", e2)
+                    passportData.startNFC = true
+                    passportData.tagConnected = false
+                    passportData.currentState = States.NFC
+                    passportData.failed = true
                     return@launch
                 }
 
@@ -106,8 +111,8 @@ class MainActivity : ComponentActivity() {
                 val dg1 = DG1File(service.getInputStream(PassportService.EF_DG1))
                 val mrz = dg1.mrzInfo
                 Log.d("PASSPORT", "Name: ${mrz.primaryIdentifier}")
-                viewModel.mrzInfo = mrz
-                viewModel.tagConnected = false
+                passportData.mrzInfo = mrz
+                passportData.tagConnected = false
 
                 // Read DG2 (Photo)
                 try {
@@ -137,12 +142,12 @@ class MainActivity : ComponentActivity() {
                             BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
                         }
 
-                        bitmap?.let { viewModel.passportPhoto = it }
+                        bitmap?.let { passportData.passportPhoto = it }
                         Log.d("PASSPORT", "Photo loaded: ${bitmap?.width}x${bitmap?.height}")
                     }
                 } catch (e: IOException) {
-                    viewModel.mrzInfo = null;
-                    viewModel.tagConnected = false;
+                    passportData.mrzInfo = null;
+                    passportData.tagConnected = false;
                 }
 
 

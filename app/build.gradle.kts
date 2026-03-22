@@ -68,6 +68,8 @@ dependencies {
     implementation("androidx.activity:activity-ktx:1.9.0")
     implementation("com.github.mhshams:jnbis:2.0.2")
     implementation("com.github.commandiron:WheelPickerCompose:1.1.11")
+    implementation("com.google.android.gms:play-services-mlkit-text-recognition:19.0.1")
+    implementation("androidx.camera:camera-mlkit-vision:1.4.x")
     implementation(libs.androidx.camera.core)
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.foundation.layout)

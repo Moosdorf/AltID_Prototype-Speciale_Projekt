@@ -3,6 +3,7 @@ package com.example.specialeprojekt.ui.login
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,7 +11,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -30,6 +35,7 @@ import com.example.specialeprojekt.R
 import com.example.specialeprojekt.data.UserViewModel
 import com.example.specialeprojekt.ui.mitid.MitIDRequestViewModel
 import com.example.specialeprojekt.ui.navigation.Route
+import com.example.specialeprojekt.ui.passport.States
 
 @Composable
 fun LoginScreen(navController: NavController) {
@@ -74,9 +80,13 @@ fun LoginScreen(navController: NavController) {
                     mitIDRequestViewModel.message = "Registrér AltID"
                 }
             },
-            modifier = Modifier.fillMaxWidth()
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
         ) {
             Text("Registrér med MitID")
         }
+
     }
 }

@@ -75,8 +75,6 @@ fun AttestationPage(navController: NavController) {
             Text(currentTime, color = data.selectedAttestation?.backGroundColor ?: Color.White)
         }
 
-        Text("Showing: " + data.selectedAttestation?.attestationType)
-
         Spacer(modifier = Modifier.height(20.dp))
 
 

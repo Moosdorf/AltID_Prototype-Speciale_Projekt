@@ -1,6 +1,5 @@
 package com.example.specialeprojekt
 
-
 import android.app.Application
 import android.util.Log
 import org.spongycastle.jce.provider.BouncyCastleProvider

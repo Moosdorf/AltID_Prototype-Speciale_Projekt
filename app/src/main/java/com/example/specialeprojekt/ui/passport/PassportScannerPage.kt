@@ -2,10 +2,8 @@ package com.example.specialeprojekt.ui.passport
 import android.app.PendingIntent
 import android.content.Intent
 import android.nfc.NfcAdapter
-import android.os.Build
 import android.util.Log
 import androidx.activity.ComponentActivity
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,23 +11,25 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.SegmentedButtonDefaults.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -43,40 +43,33 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.specialeprojekt.R
-import com.example.specialeprojekt.data.UserViewModel
 import com.example.specialeprojekt.ui.navigation.Route
 import org.jmrtd.BACKey
-import java.time.ZoneId
 import java.util.Calendar
 import java.util.TimeZone
 import kotlin.time.ExperimentalTime
-import kotlin.time.Instant
 
-private enum class States { NONE, MANUAL, SCAN }
+enum class States { NONE, MANUAL, SCAN, NFC }
 @Composable
 fun PassportScannerPage(navController: NavController) {
     val context = LocalContext.current
     val activity = context as ComponentActivity
-    val userModel: PassportDataViewModel = viewModel(activity)
-
-    var state by remember { mutableStateOf(States.NONE) }
+    val passportData: PassportDataViewModel = viewModel(activity)
 
 
 
-
-
-
-    DisposableEffect(userModel.bacKey) {
-        if (userModel.bacKey == null) return@DisposableEffect onDispose {} // if not ready to start scanning nfc
+    DisposableEffect(passportData.startNFC) {
+        if (!passportData.startNFC) return@DisposableEffect onDispose {} // if not ready to start scanning nfc
 
         val nfcAdapter = NfcAdapter.getDefaultAdapter(activity)
         val intent = Intent(activity, activity.javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
@@ -89,35 +82,84 @@ fun PassportScannerPage(navController: NavController) {
     }
 
     // navigate to main when passport photo is obtained
-    LaunchedEffect(userModel.passportPhoto) {
-        if (userModel.passportPhoto != null) {
-            navController.navigate(Route.Main.route)
+    LaunchedEffect(passportData.passportPhoto) {
+        if (passportData.passportPhoto != null) {
+            navController.navigate(Route.Main.route) {
+                popUpTo(0)
+            }
+
         }
     }
 
+        Box(modifier = Modifier.fillMaxSize()
+                        .padding(top = 48.dp)) {
 
-    Box(modifier = Modifier.fillMaxSize()
-                    .padding(top = 48.dp)) {
-        Text("Back", modifier = Modifier.clickable {
-            if (state == States.NONE) {
-                navController.navigate(Route.Main.route) {
-                    state = States.NONE
-                    popUpTo(0)
-                }
-            } else {
-                state = States.NONE
+            if (passportData.currentState != States.NFC) {
+                IconButton(
+                    onClick = {
+                        passportData.startNFC = false
+                        passportData.tagConnected = false
+
+                        if (passportData.currentState == States.NONE) {
+                            navController.navigate(Route.Main.route) {
+                                popUpTo(0)
+                            }
+                        } else {
+                            passportData.currentState = States.NONE
+                        }
+                    },
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(start = 8.dp, top = 8.dp)
+                        .offset(x = (-15).dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = "Luk",
+                        tint = Color.Black
+                    )
             }
+        }
 
-        })
-        when {
-            state == States.NONE -> {
+        // these will fill whole screen
+        when (passportData.currentState) {
+            States.SCAN -> { // to go to camera state to scan mrz line
+                MrzScannerScreen()
+            }
+            States.NONE -> { // provide guiding image 60% of screen
                 Image(
                     painter = painterResource(R.drawable.passcanmrz),
                     contentDescription = "passcanmrz",
-                    modifier = Modifier.align(Alignment.Center)
+                    modifier = Modifier.align(Alignment.TopCenter)
+                        .padding(top = 140.dp)
                 )
             }
+            States.NFC -> { // provide guiding image 60% of screen
+                Image(
+                    painter = painterResource(R.drawable.nfcchipscan),
+                    contentDescription = "passcanmrz",
+                    modifier = Modifier.align(Alignment.TopCenter)
+                        .padding(top = 140.dp)
+                        .size(300.dp)
+                        .rotate(30f)
+                )
+                ScanNFCPage(passportData)
+            }
+            States.MANUAL -> { // form for BAC data
+                Column(
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .fillMaxWidth()
+                        .padding(start = 28.dp, end = 28.dp, top = 80.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    ManualPickBAC()
+                }
+            }
+
         }
+
 
         Column(modifier = Modifier
             .align(Alignment.BottomCenter)
@@ -125,47 +167,39 @@ fun PassportScannerPage(navController: NavController) {
             .padding(horizontal = 28.dp, vertical = 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            when {
-                userModel.bacKey != null -> {
-                    ScanNFCPage(userModel)
-                }
-                state == States.NONE -> {
 
-                    Text("⌨ Indtast pasoplysninger manuelt",
-                        color = Color.Blue,
-                        modifier = Modifier.background(Color.White)
-                            .clickable{
-                                 state = States.MANUAL
-                            }
-                    )
+            if (passportData.currentState == States.NONE) {
 
-                    Button(
-                        onClick = { state = States.SCAN},
-                        shape = RoundedCornerShape(8.dp),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(56.dp)
-                    ) {
-                        Box(modifier = Modifier.fillMaxWidth()) {
-                            Text(
-                                "SCAN KODEN",
-                                modifier = Modifier.align(Alignment.CenterStart)
-                            )
-                            Icon(
-                                imageVector = Icons.Default.CameraAlt,
-                                contentDescription = null,
-                                modifier = Modifier.align(Alignment.CenterEnd)
-                            )
+                // options when no states
+                Text("⌨ Indtast pasoplysninger manuelt",
+                    color = Color(0xFF0060E6),
+                    modifier = Modifier.background(Color(0xFFFFFBFE))
+                        .clickable{
+                            passportData.currentState = States.MANUAL
                         }
+                )
+
+                Button(
+                    onClick = { passportData.currentState = States.SCAN},
+                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp)
+                ) {
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        Text(
+                            "SCAN KODEN",
+                            modifier = Modifier.align(Alignment.CenterStart)
+                        )
+                        Icon(
+                            imageVector = Icons.Default.CameraAlt,
+                            contentDescription = null,
+                            modifier = Modifier.align(Alignment.CenterEnd)
+                        )
                     }
                 }
-                state == States.MANUAL -> {
-                    ManualPickBAC()
-                }
-                state == States.SCAN -> {
-
-                }
             }
+
         }
     }
 }
@@ -176,13 +210,15 @@ fun PassportScannerPage(navController: NavController) {
 fun ManualPickBAC() {
     val context = LocalContext.current
     val activity = context as ComponentActivity
-    var passportData: PassportDataViewModel = viewModel(activity)
+    val passportData: PassportDataViewModel = viewModel(activity)
 
     var showBirthdayPick by remember { mutableStateOf(false) }
     var showExpiryPick by remember { mutableStateOf(false) }
 
     val datePickerStateBirthdate = rememberDatePickerState()
     val datePickerStateExpiry = rememberDatePickerState()
+
+    var error by remember { mutableStateOf(false) }
 
     var passportNo by remember { mutableStateOf("") }
     var birthDate by remember { mutableStateOf("") }
@@ -198,9 +234,8 @@ fun ManualPickBAC() {
         return "%02d%02d%02d".format(year, month, day)
     }
 
-    Text(passportNo)
-    Text(birthDate)
-    Text(expiryDate)
+    if (error) Text("Fejl: Oplysninger er ikke gyldige", color = Color.Red)
+    Text("Indtast pasoplysninger")
 
     // Passport number
     TextField(
@@ -217,7 +252,7 @@ fun ManualPickBAC() {
             value = birthDate,
             onValueChange = {},
             readOnly = true,
-            label = { Text("FØDSELSDATO (DD/MM/ÅÅ)") },
+            label = { Text("FØDSELSDATO (DD/MM/ÅÅÅÅ)") },
             modifier = Modifier.fillMaxWidth()
         )
         Box(modifier = Modifier
@@ -251,7 +286,7 @@ fun ManualPickBAC() {
             value = expiryDate,
             onValueChange = {},
             readOnly = true,
-            label = { Text("UDLØBSDATO (DD/MM/ÅÅ)") },
+            label = { Text("UDLØBSDATO (DD/MM/ÅÅÅÅ)") },
             modifier = Modifier.fillMaxWidth()
         )
         Box(modifier = Modifier
@@ -282,7 +317,9 @@ fun ManualPickBAC() {
     Button({
         try {
             passportData.bacKey = BACKey(passportNo, birthDate, expiryDate)
+            passportData.currentState = States.NFC
         } catch (e: Exception) {
+            error = true
             Log.e("PASSPORT", "Cannot create BAC key from attributes")
         }
     }) {
@@ -293,25 +330,100 @@ fun ManualPickBAC() {
 
 @Composable
 fun ScanNFCPage(passportData: PassportDataViewModel) {
-    when {
-        passportData.passportPhoto != null -> {
-            // Won't be visible long since LaunchedEffect navigates away
-            Text("Billede overført!")
+    Box(modifier = Modifier.fillMaxSize()) {
+        // to add dark color all screen
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0x66000000))
+        )
+        IconButton(
+            onClick = {
+                passportData.currentState = States.NONE
+                passportData.startNFC = false
+                passportData.tagConnected = false
+            },
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(start = 8.dp, top = 8.dp)
+                .offset(x = (-15).dp)
+        ) {
+            Icon(
+                imageVector = Icons.Default.Close,
+                contentDescription = "Luk",
+                tint = Color.White
+            )
         }
-        passportData.mrzInfo != null -> {
-            // MRZ read, now reading photo
-            CircularProgressIndicator(modifier = Modifier.size(64.dp))
-            Spacer(modifier = Modifier.height(16.dp))
-            Text("Indlæser billede...")
-        }
-        passportData.tagConnected -> {
-            CircularProgressIndicator(modifier = Modifier.size(64.dp))
-            Spacer(modifier = Modifier.height(16.dp))
-            Text("Pas fundet...")
-        }
-        else -> {
-            Spacer(modifier = Modifier.height(24.dp))
-            Text("Hold telefonen tæt på dit pas.")
+        // 40% not dark
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .fillMaxHeight(0.4f)
+                .background(
+                    color = Color.White,
+                    shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+                )
+        ) {
+            Column(
+                modifier = Modifier.fillMaxSize()
+                    .padding(all = 10.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+
+            ) {
+                when {
+                    passportData.passportPhoto != null -> {
+                        Text("Billede overført!")
+                    }
+                    passportData.mrzInfo != null -> {
+                        CircularProgressIndicator(modifier = Modifier.size(64.dp))
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text("Indlæser billede...")
+                    }
+                    passportData.tagConnected -> {
+                        CircularProgressIndicator(modifier = Modifier.size(64.dp))
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text("Pas fundet...")
+                    }
+                    passportData.startNFC -> {
+                        if (passportData.failed) Text("OBS: Der var fejl i scanning. Prøv igen.", color = Color.Red)
+                        Spacer(modifier = Modifier.height(24.dp))
+                        Text("Klar til at scanne")
+                        Spacer(modifier = Modifier.height(24.dp))
+                    }
+                    else -> {
+                        Text("Læg telefonen oven på dit pas for at aflæse chippen.")
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Button(
+                            onClick = { passportData.startNFC = true },
+                            shape = RoundedCornerShape(8.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(56.dp)
+                        ) {
+                            Box(modifier = Modifier.fillMaxWidth()) {
+                                Text(
+                                    "AFLÆS CHIP",
+                                    modifier = Modifier.align(Alignment.CenterStart)
+                                )
+                                Icon(
+                                    imageVector = Icons.Default.CameraAlt,
+                                    contentDescription = null,
+                                    modifier = Modifier.align(Alignment.CenterEnd)
+                                )
+                            }
+                        }
+                    }
+                }
+                Button({
+                    passportData.startNFC = false
+                    passportData.currentState = States.NONE
+                },
+                    modifier = Modifier.offset(y = 40.dp)) {
+                    Text("Annuller")
+                }
+            }
         }
     }
 }

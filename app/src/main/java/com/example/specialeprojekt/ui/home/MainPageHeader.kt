@@ -23,10 +23,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.specialeprojekt.R
+import com.example.specialeprojekt.data.LegitimationsBevis
 
 @Composable
-fun MainPageHeader(addProof: () -> Unit, showProof: () -> Unit) {
-    Surface(color = MaterialTheme.colorScheme.surface) {
+fun MainPageHeader(legitimationsBevisAdded: Boolean, addProof: () -> Unit, showMenu: () -> Unit) {
+    Surface(color = Color(0xFFFFFBFE)) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -47,18 +48,21 @@ fun MainPageHeader(addProof: () -> Unit, showProof: () -> Unit) {
 
             // Right side
             Row {
-                Icon(
-                    modifier = Modifier.clickable {
-                        addProof()
-                    },
-                    imageVector = Icons.Filled.AddCircle,
-                    contentDescription = "Add",
-                    tint = Color.Black
-                )
+                if (legitimationsBevisAdded) {
+                    Icon(
+                        modifier = Modifier.clickable {
+                            addProof()
+                        },
+                        imageVector = Icons.Filled.AddCircle,
+                        contentDescription = "Add",
+                        tint = Color.Black
+                    )
+                }
+
                 Spacer(modifier = Modifier.width(12.dp))
                 Icon(
                     modifier = Modifier.clickable {
-                        showProof()
+                        showMenu()
                     },
                     imageVector = Icons.Filled.Menu,
                     contentDescription = "Menu",

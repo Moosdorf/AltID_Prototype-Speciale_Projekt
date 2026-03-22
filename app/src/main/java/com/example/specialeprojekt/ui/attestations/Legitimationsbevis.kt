@@ -42,54 +42,56 @@ fun LegitimationsBevisComp() {
     Column(
         modifier = Modifier
             .background(Color.White, RoundedCornerShape(10.dp))
-            .height(600.dp)
             .width(300.dp)
-            .padding(10.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(10.dp),  // no height — dynamic
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-
         QrCodeDisplay("monkey")
 
-        Column(
+        Text(
+            "QR koden indeholder:",
+            fontSize = 12.sp,
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 10.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text("QR koden indeholder:",
-                modifier = Modifier
-                    .background(Color.Gray.copy(alpha = 0.1f), RoundedCornerShape(6.dp))
-                    .padding(horizontal = 8.dp, vertical = 4.dp))
-            Spacer(modifier = Modifier.height(18.dp))
+                .background(Color.Gray.copy(alpha = 0.1f), RoundedCornerShape(6.dp))
+                .padding(horizontal = 6.dp, vertical = 2.dp)
+        )
 
-            Text("Navn:",
-                modifier = Modifier
-                    .background(Color.Gray.copy(alpha = 0.1f), RoundedCornerShape(6.dp))
-                    .padding(horizontal = 8.dp, vertical = 4.dp))
-            Text(idProof.attributes["Fornavn"] + " " + idProof.attributes["Efternavn"])
+        Text(
+            "Navn:",
+            fontSize = 12.sp,
+            modifier = Modifier
+                .background(Color.Gray.copy(alpha = 0.1f), RoundedCornerShape(6.dp))
+                .padding(horizontal = 6.dp, vertical = 2.dp)
+        )
+        Text(
+            idProof.attributes["Fornavn"] + " " + idProof.attributes["Efternavn"],
+            fontSize = 12.sp
+        )
 
-            val entries = selectedAttributes.entries.toList().drop(2)
-
-            entries.chunked(2).forEach { rowItems ->
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-
-                ) {
-                    rowItems.forEach { (key, value) ->
-                        Column(modifier = Modifier.weight(1f),
-                            horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text(key, fontSize = 18.sp,
-                                modifier = Modifier
-                                    .background(Color.Gray.copy(alpha = 0.1f), RoundedCornerShape(6.dp))
-                                    .padding(horizontal = 8.dp, vertical = 4.dp))
-
-                            Text(value, fontSize = 18.sp)
-                        }
+        val entries = selectedAttributes.entries.toList().drop(2)
+        entries.chunked(2).forEach { rowItems ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                rowItems.forEach { (key, value) ->
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(2.dp)
+                    ) {
+                        Text(
+                            key,
+                            fontSize = 12.sp,
+                            modifier = Modifier
+                                .background(Color.Gray.copy(alpha = 0.1f), RoundedCornerShape(6.dp))
+                                .padding(horizontal = 6.dp, vertical = 2.dp)
+                        )
+                        Text(value, fontSize = 12.sp)
                     }
                 }
             }
-
         }
     }
 
