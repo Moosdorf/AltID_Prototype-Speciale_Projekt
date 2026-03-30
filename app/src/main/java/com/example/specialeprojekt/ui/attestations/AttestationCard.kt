@@ -31,7 +31,7 @@ fun AttestationCard(data: AttestationData, navController: NavController) {
 
     Surface(modifier = Modifier.padding(10.dp),
             onClick = {
-                viewModel.selectedAttestation = data;
+                viewModel.selectedAttestation = data
                 navController.navigate(Route.Attestation.route)
                         }) {
         Box(modifier = Modifier

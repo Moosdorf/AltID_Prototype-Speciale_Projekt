@@ -20,6 +20,8 @@ import androidx.compose.material.icons.filled.ArrowCircleLeft
 import androidx.compose.material.icons.filled.ArrowCircleRight
 import androidx.compose.material.icons.filled.Cake
 import androidx.compose.material.icons.filled.CreditCard
+import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -95,7 +97,6 @@ fun MainPage(navController: NavController) {
             ) { page ->
                 AttestationCard(attestations[page], navController)
             }
-
             Spacer(modifier = Modifier.height(16.dp))
 
             // arrows + name
@@ -114,7 +115,6 @@ fun MainPage(navController: NavController) {
                                 pagerState.animateScrollToPage(pagerState.currentPage - 1)
                         }
                     })
-
                 Button(onClick = { navController.navigate(Route.Attestation.route) }) {
                     Text(attestations[pagerState.currentPage].attestationType)
                 }
@@ -130,13 +130,10 @@ fun MainPage(navController: NavController) {
                         }
                     })
             }
-
-
             Spacer(modifier = Modifier.height(16.dp))
             ProofButtons(onAddAttestation = { showAddProofOptions = true }, navController)
         }
     }
-
 
     if (showAddProofOptions) {
         AddProofAlertBox { showAddProofOptions = false }
@@ -152,26 +149,39 @@ fun PassportImage(navController: NavController) {
     val context = LocalContext.current
     val activity = context as ComponentActivity
     val passportModel: PassportDataViewModel = viewModel(activity)
-    val bitmap = passportModel.passportPhoto
+    val userViewModel: UserViewModel = viewModel(activity)
+    val bitmap = userViewModel.passportPhoto
 
-    if (bitmap != null) {
+    if (bitmap != null && userViewModel.showPassportImage) {
         Image(
             bitmap = bitmap.asImageBitmap(),
             contentDescription = "user image",
             modifier = Modifier.height(100.dp).width(100.dp)
+                .clickable {
+                    userViewModel.showPassportImage = false
+                }
         )
     } else {
         Image(
             painter = painterResource(R.drawable.userpic),
             contentDescription = "user image",
             modifier = Modifier.height(100.dp).width(100.dp)
-                .clickable { navController.navigate(Route.NFCScan.route) }
+                .clickable {
+                    if (userViewModel.passportPhoto != null) {
+                        userViewModel.showPassportImage = true
+                    } else {
+                        navController.navigate(Route.NFCScan.route)
+                    }
+                }
         )
     }
 }
 
 @Composable
 fun ShowMenuAlertBox(onDismiss: () -> Unit, navController: NavController) {
+    val context = LocalContext.current
+    val activity = context as ComponentActivity
+    val userViewModel: UserViewModel = viewModel(activity)
 
     AlertDialog(
         onDismissRequest = { onDismiss() },
@@ -179,14 +189,24 @@ fun ShowMenuAlertBox(onDismiss: () -> Unit, navController: NavController) {
         text = {
             Column {
                 listOf(
-                    "Scan pas" to Icons.Filled.CreditCard
+                    "Scan pas" to Icons.Filled.CreditCard,
+                    "Vis historik" to Icons.Filled.History,
+                    "Log ud" to Icons.Filled.Logout
                 ).forEach { (name, icon) ->
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
                                 when (name) {
-                                    "Scan pas" -> navController.navigate(Route.NFCScan.route)
+                                    "Scan pas" -> {
+                                        if (userViewModel.passportPhoto == null) {
+                                            navController.navigate(Route.NFCScan.route)
+                                        }
+                                    }
+                                    "Vis historik" -> {
+                                            // to do
+                                         }
+                                    "Log ud" -> navController.navigate(Route.Login.route)
                                 }
                                 onDismiss()
                             }
@@ -208,7 +228,6 @@ fun ShowMenuAlertBox(onDismiss: () -> Unit, navController: NavController) {
     )
 }
 
-
 @Composable
 fun AddProofAlertBox(onDismiss: () -> Unit) {
     val context = LocalContext.current
@@ -229,7 +248,6 @@ fun AddProofAlertBox(onDismiss: () -> Unit) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                // add only the clicked one
                                 when (name) {
                                     "Aldersbevis" -> userModel.addAttestation(AldersBevis())
                                 }
@@ -252,9 +270,6 @@ fun AddProofAlertBox(onDismiss: () -> Unit) {
         }
     )
 }
-
-
-
 
 @Composable
 fun ProofButtons(onAddAttestation: () -> Unit, navController: NavController) {
@@ -282,7 +297,6 @@ fun ProofButtons(onAddAttestation: () -> Unit, navController: NavController) {
                 Text("Scan QR kode")
             }
         }
-
     }
 }
 

@@ -27,12 +27,14 @@ import org.jmrtd.lds.icao.DG1File
 import org.jmrtd.lds.icao.DG2File
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import com.example.specialeprojekt.data.UserViewModel
 import com.example.specialeprojekt.ui.passport.States
 import java.io.DataInputStream
 import java.io.IOException
 
 class MainActivity : ComponentActivity() {
     private val passportData: PassportDataViewModel by viewModels()
+    private val userViewModel: UserViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -142,7 +144,7 @@ class MainActivity : ComponentActivity() {
                             BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
                         }
 
-                        bitmap?.let { passportData.passportPhoto = it }
+                        bitmap?.let { userViewModel.passportPhoto = it }
                         Log.d("PASSPORT", "Photo loaded: ${bitmap?.width}x${bitmap?.height}")
                     }
                 } catch (e: IOException) {

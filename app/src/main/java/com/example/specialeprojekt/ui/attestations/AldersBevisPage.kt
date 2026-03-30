@@ -46,12 +46,7 @@ fun AldersBevisComp() {
         15 to (currentAge >= 15),
         16 to (currentAge >= 16),
         18 to (currentAge >= 18),
-        21 to (currentAge >= 21),
-        23 to (currentAge >= 23),
-        45 to (currentAge >= 45),
-        65 to (currentAge >= 65),
-        67 to (currentAge >= 67),
-        75 to (currentAge >= 75),
+        67 to (currentAge >= 67)
     )
     val agePlus = remember { mutableIntStateOf(if (currentAge >= 18) 18 else 13) }
 
@@ -108,7 +103,7 @@ fun SelectAttributesComposable(onDismiss: () -> Unit, attributes: Map<Int, Boole
         title = { Text("Vælg attribut") },
         text = {
             Column {
-                attributes.forEach { (key, value) ->
+                attributes.forEach { (key) ->
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -119,8 +114,7 @@ fun SelectAttributesComposable(onDismiss: () -> Unit, attributes: Map<Int, Boole
                             .padding(vertical = 12.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(""+key, modifier = Modifier.weight(1f))
-                        Text(""+value, color = Color.Gray)
+                        Text("$key+", modifier = Modifier.weight(1f))
                     }
                 }
             }

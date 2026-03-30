@@ -27,18 +27,18 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.specialeprojekt.data.SelectableAttribute
-import com.example.specialeprojekt.ui.home.AttestationPageHeader
 import kotlinx.coroutines.delay
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import com.example.specialeprojekt.ui.home.PassportImage
+
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AttestationPage(navController: NavController) {
     val context = LocalContext.current
     val data: AttestationPageViewModel = viewModel(context as ComponentActivity)
-
 
 
     Column(

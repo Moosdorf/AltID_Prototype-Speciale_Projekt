@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.specialeprojekt.R
+import com.example.specialeprojekt.data.UserViewModel
 import com.example.specialeprojekt.ui.navigation.Route
 import org.jmrtd.BACKey
 import java.util.Calendar
@@ -65,6 +66,7 @@ fun PassportScannerPage(navController: NavController) {
     val context = LocalContext.current
     val activity = context as ComponentActivity
     val passportData: PassportDataViewModel = viewModel(activity)
+    val userViewModel: UserViewModel = viewModel(activity)
 
 
 
@@ -82,8 +84,8 @@ fun PassportScannerPage(navController: NavController) {
     }
 
     // navigate to main when passport photo is obtained
-    LaunchedEffect(passportData.passportPhoto) {
-        if (passportData.passportPhoto != null) {
+    LaunchedEffect(userViewModel.passportPhoto) {
+        if (userViewModel.passportPhoto != null) {
             navController.navigate(Route.Main.route) {
                 popUpTo(0)
             }
@@ -143,7 +145,7 @@ fun PassportScannerPage(navController: NavController) {
                         .size(300.dp)
                         .rotate(30f)
                 )
-                ScanNFCPage(passportData)
+                ScanNFCPage()
             }
             States.MANUAL -> { // form for BAC data
                 Column(
@@ -329,7 +331,12 @@ fun ManualPickBAC() {
 }
 
 @Composable
-fun ScanNFCPage(passportData: PassportDataViewModel) {
+fun ScanNFCPage() {
+    val context = LocalContext.current
+    val activity = context as ComponentActivity
+    val passportData: PassportDataViewModel = viewModel(activity)
+    val userViewModel: UserViewModel = viewModel(activity)
+
     Box(modifier = Modifier.fillMaxSize()) {
         // to add dark color all screen
         Box(
@@ -373,7 +380,7 @@ fun ScanNFCPage(passportData: PassportDataViewModel) {
 
             ) {
                 when {
-                    passportData.passportPhoto != null -> {
+                    userViewModel.passportPhoto != null -> {
                         Text("Billede overført!")
                     }
                     passportData.mrzInfo != null -> {

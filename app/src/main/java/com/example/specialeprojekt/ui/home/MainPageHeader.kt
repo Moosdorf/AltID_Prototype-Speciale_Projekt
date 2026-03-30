@@ -72,7 +72,8 @@ fun MainPageHeader(legitimationsBevisAdded: Boolean, addProof: () -> Unit, showM
                 Spacer(modifier = Modifier.width(12.dp))
                 Icon(
                     modifier = Modifier.clickable {
-                        if (passportData.passportPhoto == null)                                               showMenu()
+                        if (userData.passportPhoto == null)
+                            showMenu()
                     },
                     imageVector = Icons.Filled.Menu,
                     contentDescription = "Menu",
