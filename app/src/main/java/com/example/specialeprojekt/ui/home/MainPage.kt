@@ -68,71 +68,58 @@ fun MainPage(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(32.dp))
-        MainPageHeader(attestations.isNotEmpty(), { showAddProofOptions = true }, { showMenu = true })
+        MainPageHeader((attestations.isNotEmpty() && attestations.size < 2), { showAddProofOptions = true }, { showMenu = true })
 
         PassportImage(navController)
         Spacer(modifier = Modifier.height(32.dp))
         Text(text = userModel.username)
         Spacer(modifier = Modifier.height(24.dp))
 
-
-        if (attestations.isEmpty()) {
-            // empty state
-            Column(
-                modifier = Modifier.fillMaxWidth().weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text("Ingen beviser tilføjet")
-                Spacer(modifier = Modifier.height(16.dp))
-                ProofButtons(onAddAttestation = { showAddProofOptions = true }, navController)
-            }
-        } else {
-            // carousel
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(horizontal = 60.dp),
-                pageSpacing = 5.dp
-            ) { page ->
-                AttestationCard(attestations[page], navController)
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // arrows + name
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowCircleLeft,
-                    contentDescription = "Previous",
-                    tint = if (pagerState.currentPage == 0) Color.Gray else Color.Black,
-                    modifier = Modifier.clickable {
-                        scope.launch {
-                            if (pagerState.currentPage > 0)
-                                pagerState.animateScrollToPage(pagerState.currentPage - 1)
-                        }
-                    })
-                Button(onClick = { navController.navigate(Route.Attestation.route) }) {
-                    Text(attestations[pagerState.currentPage].attestationType)
-                }
-
-                Icon(
-                    imageVector = Icons.Filled.ArrowCircleRight,
-                    contentDescription = "Next",
-                    tint = if (pagerState.currentPage == pagerState.pageCount -1) Color.Gray else Color.Black,
-                    modifier = Modifier.clickable {
-                        scope.launch {
-                            if (pagerState.currentPage < pagerState.pageCount - 1)
-                                pagerState.animateScrollToPage(pagerState.currentPage + 1)
-                        }
-                    })
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            ProofButtons(onAddAttestation = { showAddProofOptions = true }, navController)
+        // carousel
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier.fillMaxWidth(),
+            contentPadding = PaddingValues(horizontal = 60.dp),
+            pageSpacing = 5.dp
+        ) { page ->
+            AttestationCard(attestations[page], navController)
         }
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // arrows + name
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Icon(
+                imageVector = Icons.Filled.ArrowCircleLeft,
+                contentDescription = "Previous",
+                tint = if (pagerState.currentPage == 0) Color.Gray else Color.Black,
+                modifier = Modifier.clickable {
+                    scope.launch {
+                        if (pagerState.currentPage > 0)
+                            pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                    }
+                })
+            Button(onClick = { navController.navigate(Route.Attestation.route) }) {
+                Text(attestations[pagerState.currentPage].attestationType)
+            }
+
+            Icon(
+                imageVector = Icons.Filled.ArrowCircleRight,
+                contentDescription = "Next",
+                tint = if (pagerState.currentPage == pagerState.pageCount -1) Color.Gray else Color.Black,
+                modifier = Modifier.clickable {
+                    scope.launch {
+                        if (pagerState.currentPage < pagerState.pageCount - 1)
+                            pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                    }
+                })
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        ProofButtons(onAddAttestation = { showAddProofOptions = true }, navController)
+
     }
 
     if (showAddProofOptions) {
@@ -148,7 +135,6 @@ fun MainPage(navController: NavController) {
 fun PassportImage(navController: NavController) {
     val context = LocalContext.current
     val activity = context as ComponentActivity
-    val passportModel: PassportDataViewModel = viewModel(activity)
     val userViewModel: UserViewModel = viewModel(activity)
     val bitmap = userViewModel.passportPhoto
 
@@ -274,28 +260,15 @@ fun AddProofAlertBox(onDismiss: () -> Unit) {
 @Composable
 fun ProofButtons(onAddAttestation: () -> Unit, navController: NavController) {
     val context = LocalContext.current
-    val mitIDRequestViewModel: MitIDRequestViewModel = viewModel(context as ComponentActivity)
-    val userModel: UserViewModel = viewModel(context)
+    val userModel: UserViewModel = viewModel(context as ComponentActivity)
 
     Row {
-        if (userModel.attestations.isEmpty()) {
-            Button(onClick = {
-                mitIDRequestViewModel.path =  Route.Main.route
-                mitIDRequestViewModel.message = "Legitimationsbevis"
-                navController.navigate(Route.MitIDAuth.route)
-            }) {
-
-                Text("Tilføj legitimationsbevis")
-            }
+        Button(onClick = { onAddAttestation() },
+            enabled = userModel.attestations.keys.size < 2) {
+            Text("Tilføj bevis")
         }
-        else {
-            Button(onClick = { onAddAttestation() },
-                enabled = userModel.attestations.keys.size < 2) {
-                Text("Tilføj bevis")
-            }
-            Button(onClick = { navController.navigate(Route.QRScanner.route) }) {
-                Text("Scan QR kode")
-            }
+        Button(onClick = { navController.navigate(Route.QRScanner.route) }) {
+            Text("Scan QR kode")
         }
     }
 }

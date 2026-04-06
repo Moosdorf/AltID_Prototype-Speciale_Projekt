@@ -1,5 +1,6 @@
 package com.example.specialeprojekt.ui.requests
 
+import android.R
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -16,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,6 +32,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.specialeprojekt.data.AldersBevis
+import com.example.specialeprojekt.data.LegitimationsBevis
 import com.example.specialeprojekt.data.RequestData
 import com.example.specialeprojekt.data.UserViewModel
 import com.example.specialeprojekt.data.attributesMap
@@ -90,11 +94,36 @@ fun RequestPage(navController: NavController) {
                 Column {
                     val attestation = userModel.attestations[request.attestationType]
                     if (attestation != null) {
-                        for (attr in request.attributesRequested) {
-                            val displayName = attributesMap[attr] ?: attr
-                            val value = attestation.attributes[displayName]
-                            Text("$displayName: $value")
+                        when (attestation) {
+                            is LegitimationsBevis -> {
+                                for (attr in request.attributesRequested) {
+                                    val displayName = attributesMap[attr] ?: attr
+                                    val value = attestation.attributes[displayName]
+                                    Text("$displayName: $value")
+                                }
+                            }
+                            is AldersBevis -> {
+                                if (request.attributesRequested.size == 1) {
+                                    val ageRequested = request.attributesRequested[0].toInt()
+                                    val userAge = attestation.age
+                                    Column(
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                        modifier = Modifier.fillMaxWidth()
+                                    ) {
+                                        Text(
+                                            text = "Aldersgrænse",
+                                            style = MaterialTheme.typography.headlineMedium
+                                        )
+                                        Text(
+                                            text = "${ageRequested}+",
+                                            style = MaterialTheme.typography.bodyLarge,
+                                            color = if (userAge >= ageRequested) Color.Green else Color.Red
+                                        )
+                                    }
+                                }
+                            }
                         }
+
                     }
                 }
             }

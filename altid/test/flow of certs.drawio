@@ -1,0 +1,178 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.3.0 Chrome/140.0.7339.249 Electron/38.7.2 Safari/537.36" version="29.3.0">
+  <diagram name="Page-1" id="d3TNIiDTZAfk_b5vaq4X">
+    <mxGraphModel dx="2633" dy="1061" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=light-dark(#ffffff, #1d293b);strokeColor=light-dark(#d1cc23, #3c3500);strokeWidth=4;gradientColor=#7ea6e0;gradientDirection=east;" value="EU Commission" vertex="1">
+          <mxGeometry height="60" width="120" x="-90" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-8" edge="1" parent="1" source="79J5BxQuv6yXfpvYn9Uf-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="79J5BxQuv6yXfpvYn9Uf-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-9" connectable="0" parent="79J5BxQuv6yXfpvYn9Uf-8" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Sign ACA cert" vertex="1">
+          <mxGeometry relative="1" x="-0.3913" y="-3" as="geometry">
+            <mxPoint x="-1" y="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-35" edge="1" parent="1" source="79J5BxQuv6yXfpvYn9Uf-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.25;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="79J5BxQuv6yXfpvYn9Uf-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-36" connectable="0" parent="79J5BxQuv6yXfpvYn9Uf-35" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Notify of Issuers" vertex="1">
+          <mxGeometry relative="1" x="-0.0637" y="-2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Registrar" vertex="1">
+          <mxGeometry height="60" width="120" x="260" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-12" edge="1" parent="1" source="79J5BxQuv6yXfpvYn9Uf-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="79J5BxQuv6yXfpvYn9Uf-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-13" edge="1" parent="1" source="79J5BxQuv6yXfpvYn9Uf-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="79J5BxQuv6yXfpvYn9Uf-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-14" connectable="0" parent="79J5BxQuv6yXfpvYn9Uf-13" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Provide AC&lt;div&gt;signed by&lt;/div&gt;&lt;div&gt;&amp;nbsp;ACA cert&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.7116" y="3" as="geometry">
+            <mxPoint y="-3" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="ACA" vertex="1">
+          <mxGeometry height="60" width="120" x="440" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-21" edge="1" parent="1" source="79J5BxQuv6yXfpvYn9Uf-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;dashed=1;" target="79J5BxQuv6yXfpvYn9Uf-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-22" connectable="0" parent="79J5BxQuv6yXfpvYn9Uf-21" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="trusts" vertex="1">
+          <mxGeometry relative="1" x="0.1568" y="-1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="Verifier" vertex="1">
+          <mxGeometry height="60" width="120" x="340" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-17" edge="1" parent="1" source="79J5BxQuv6yXfpvYn9Uf-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="79J5BxQuv6yXfpvYn9Uf-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-18" connectable="0" parent="79J5BxQuv6yXfpvYn9Uf-17" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Issue Attestation&lt;div&gt;Signed by AC&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.412" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-11" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" value="Issuer" vertex="1">
+          <mxGeometry height="60" width="120" x="120" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-19" edge="1" parent="1" source="79J5BxQuv6yXfpvYn9Uf-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.75;entryY=1;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="79J5BxQuv6yXfpvYn9Uf-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-20" connectable="0" parent="79J5BxQuv6yXfpvYn9Uf-19" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Present Attestation&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="0.0381" y="1" as="geometry">
+            <mxPoint y="-41" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-16" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="Holder" vertex="1">
+          <mxGeometry height="60" width="120" x="210" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-41" edge="1" parent="1" source="79J5BxQuv6yXfpvYn9Uf-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="79J5BxQuv6yXfpvYn9Uf-42">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="940" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-64" connectable="0" parent="79J5BxQuv6yXfpvYn9Uf-41" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Text" vertex="1">
+          <mxGeometry relative="1" x="-0.1333" y="2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-23" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Registrar&lt;div&gt;Certificate&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="880" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-24" parent="1" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;" value="&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;Verifier trusts that&lt;div&gt;the Issuer and Wallet&lt;/div&gt;&lt;div&gt;Provider made the&amp;nbsp;&lt;/div&gt;&lt;div&gt;necessary checks.&lt;/div&gt;&lt;div&gt;Checks if WUA is&lt;/div&gt;&lt;div&gt;revoked&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="150" width="180" x="500" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-25" edge="1" parent="1" source="79J5BxQuv6yXfpvYn9Uf-10" style="endArrow=none;dashed=1;html=1;dashPattern=1 3;strokeWidth=2;rounded=0;entryX=0.07;entryY=0.4;entryDx=0;entryDy=0;entryPerimeter=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="79J5BxQuv6yXfpvYn9Uf-24" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="460" y="540" as="sourcePoint" />
+            <mxPoint x="510" y="490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-27" edge="1" parent="1" source="79J5BxQuv6yXfpvYn9Uf-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="79J5BxQuv6yXfpvYn9Uf-16" value="Provide Wallet Unit Attestation&lt;div&gt;Signed by Provider AC&lt;/div&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-26" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value="Wallet Provider" vertex="1">
+          <mxGeometry height="60" width="120" x="-60" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-37" edge="1" parent="1" source="79J5BxQuv6yXfpvYn9Uf-26" style="endArrow=none;dashed=1;html=1;dashPattern=1 3;strokeWidth=2;rounded=0;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="79J5BxQuv6yXfpvYn9Uf-38" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="-60" y="610" as="sourcePoint" />
+            <mxPoint x="-30" y="600" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-38" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="appointed by&amp;nbsp;&lt;div&gt;EU Member State&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="120" x="-90" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-39" edge="1" parent="1" source="79J5BxQuv6yXfpvYn9Uf-3" style="endArrow=none;dashed=1;html=1;dashPattern=1 3;strokeWidth=2;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="79J5BxQuv6yXfpvYn9Uf-40" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="320" y="190" as="sourcePoint" />
+            <mxPoint x="320" y="130" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-40" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="appointed by&amp;nbsp;&lt;div&gt;EU Member State&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="120" x="260" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-50" edge="1" parent="1" source="79J5BxQuv6yXfpvYn9Uf-42" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="79J5BxQuv6yXfpvYn9Uf-44">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-51" edge="1" parent="1" source="79J5BxQuv6yXfpvYn9Uf-42" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="79J5BxQuv6yXfpvYn9Uf-45">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-42" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="ACA" vertex="1">
+          <mxGeometry height="60" width="120" x="880" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-58" edge="1" parent="1" source="79J5BxQuv6yXfpvYn9Uf-44" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="79J5BxQuv6yXfpvYn9Uf-47">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-59" connectable="0" parent="79J5BxQuv6yXfpvYn9Uf-58" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="2. Sign attestation" vertex="1">
+          <mxGeometry relative="1" x="-0.5105" as="geometry">
+            <mxPoint x="20" y="-16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-44" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" value="Issuer" vertex="1">
+          <mxGeometry height="60" width="120" x="1000" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-45" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="Verifier" vertex="1">
+          <mxGeometry height="60" width="120" x="760" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-53" edge="1" parent="1" source="79J5BxQuv6yXfpvYn9Uf-47" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="79J5BxQuv6yXfpvYn9Uf-45">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-60" connectable="0" parent="79J5BxQuv6yXfpvYn9Uf-53" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Verify&amp;nbsp;&lt;div&gt;attestations&amp;nbsp;&lt;/div&gt;&lt;div&gt;signature&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.0409" y="-3" as="geometry">
+            <mxPoint x="-1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-56" edge="1" parent="1" source="79J5BxQuv6yXfpvYn9Uf-47" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="79J5BxQuv6yXfpvYn9Uf-54">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-57" connectable="0" parent="79J5BxQuv6yXfpvYn9Uf-56" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Verify certificates" vertex="1">
+          <mxGeometry relative="1" x="-0.1158" y="4" as="geometry">
+            <mxPoint x="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-47" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="Holder" vertex="1">
+          <mxGeometry height="60" width="120" x="880" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-54" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6c8ebf;gradientColor=#7ea6e0;gradientDirection=east;" value="EU Commission&lt;div&gt;Trusted List&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="700" y="650" as="geometry" />
+        </mxCell>
+        <mxCell id="79J5BxQuv6yXfpvYn9Uf-63" edge="1" parent="1" source="79J5BxQuv6yXfpvYn9Uf-47" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;" target="79J5BxQuv6yXfpvYn9Uf-44" value="1. Provide WUA">
+          <mxGeometry relative="1" x="0.0345" y="10" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="1030" y="535" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

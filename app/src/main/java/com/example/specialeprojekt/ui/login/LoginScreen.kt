@@ -2,6 +2,7 @@ package com.example.specialeprojekt.ui.login
 
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,12 +37,15 @@ import com.example.specialeprojekt.data.UserViewModel
 import com.example.specialeprojekt.ui.mitid.MitIDRequestViewModel
 import com.example.specialeprojekt.ui.navigation.Route
 import com.example.specialeprojekt.ui.passport.States
+enum class LoginState { CREATE, PID, PASSPORT }
 
 @Composable
 fun LoginScreen(navController: NavController) {
     var username by remember { mutableStateOf("") }
     val context = LocalContext.current
     val userViewModel: UserViewModel = viewModel(context as ComponentActivity)
+    val loginState: LogInViewModel = viewModel(context)
+
 
 
     val mitIDRequestViewModel: MitIDRequestViewModel = viewModel(context)
@@ -53,39 +57,95 @@ fun LoginScreen(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Image(
-            painter = painterResource(R.drawable.digst),
-            contentDescription = "user image",
-            modifier = Modifier.height(200.dp).width(200.dp)
-        )
+        when(loginState.currentState) {
+            LoginState.CREATE -> {
+                Image(
+                    painter = painterResource(R.drawable.digst),
+                    contentDescription = "digst logo",
+                    modifier = Modifier.height(200.dp).width(200.dp)
+                )
 
-        Text("Opret AltID konto", fontSize = 24.sp)
+                Text("Opret AltID konto", fontSize = 24.sp)
 
-        Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(32.dp))
 
-        TextField(
-            value = username,
-            onValueChange = { username = it },
-            label = { Text("Username") },
-            modifier = Modifier.fillMaxWidth()
-        )
+                TextField(
+                    value = username,
+                    onValueChange = { username = it },
+                    label = { Text("Username") },
+                    modifier = Modifier.fillMaxWidth()
+                )
 
-        Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-        Button(
-            onClick = {
-                userViewModel.username = username
-                navController.navigate(Route.MitIDAuth.route) {
-                    mitIDRequestViewModel.path = Route.Main.route
-                    mitIDRequestViewModel.message = "Registrér AltID"
+                Button(
+                    onClick = {
+                        userViewModel.username = username
+                        loginState.currentState = LoginState.PID
+                        navController.navigate(Route.MitIDAuth.route) {
+                            mitIDRequestViewModel.path = Route.Login.route
+                            mitIDRequestViewModel.message = "Registrér AltID"
+                        }
+                    },
+                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp)
+                ) {
+                    Text("Registrér med MitID")
                 }
-            },
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp)
-        ) {
-            Text("Registrér med MitID")
+            }
+            LoginState.PID -> {
+                Image(
+                    painter = painterResource(R.drawable.digst),
+                    contentDescription = "digst logo",
+                    modifier = Modifier.height(200.dp).width(200.dp)
+                )
+
+                Text("Tilføj Legitimationsbevis", fontSize = 24.sp)
+                Text("For at bruge AltID-appen skal du tilføje et legitimationsbevis.", fontSize = 14.sp)
+
+                Button(
+                    onClick = {
+                        userViewModel.username = username
+                        loginState.currentState = LoginState.PASSPORT
+                        navController.navigate(Route.MitIDAuth.route) {
+                            mitIDRequestViewModel.path = Route.Login.route
+                            mitIDRequestViewModel.message = "Legitimationsbevis"
+                        }
+                    },
+                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp)
+                ) {
+                    Text("Tilføj Legitimationsbevis")
+                }
+            }
+            LoginState.PASSPORT -> {
+                Image(
+                    painter = painterResource(R.drawable.digst),
+                    contentDescription = "digst logo",
+                    modifier = Modifier.height(200.dp).width(200.dp)
+                )
+
+                Text("Tilføj pasbillede", fontSize = 24.sp)
+                Text("Det er ikke et krav at tilføje.", fontSize = 14.sp)
+                Button(
+                    onClick = {
+                        userViewModel.username = username
+                        loginState.currentState = LoginState.PASSPORT
+                        navController.navigate(Route.NFCScan.route)
+                    },
+                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp)
+                ) {
+                    Text("Tilføj Pasbillede")
+                }
+                Text("Tilføj senere.", modifier = Modifier.clickable{navController.navigate(Route.Main.route)})
+            }
         }
 
     }

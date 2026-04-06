@@ -144,7 +144,10 @@ class MainActivity : ComponentActivity() {
                             BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
                         }
 
-                        bitmap?.let { userViewModel.passportPhoto = it }
+                        bitmap?.let {
+                            userViewModel.passportPhoto = it
+                            userViewModel.showPassportImage = true
+                        }
                         Log.d("PASSPORT", "Photo loaded: ${bitmap?.width}x${bitmap?.height}")
                     }
                 } catch (e: IOException) {

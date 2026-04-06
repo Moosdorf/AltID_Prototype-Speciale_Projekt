@@ -36,6 +36,7 @@ data class LegitimationsBevis(
         "Efternavn" to "Smith",
         "Fødselsdato" to "16-2-1982",
         "Fødselsted" to "Roskilde",
+        "CPR" to "1602824233",
         "Nationalitet" to "Dansk",
         "Adresse" to "Nørrebrogade 42, 2200 København N",
     )
@@ -53,6 +54,7 @@ val attributesMap = mapOf(
     "dateOfBirth" to "Fødselsdato",
     "placeOfBirth" to "Fødselsted",
     "nationality" to "Nationalitet",
+    "cpr" to "CPR",
     "address" to "Adresse",
     "attestationType" to "Bevistype",
     "age" to "Alder"

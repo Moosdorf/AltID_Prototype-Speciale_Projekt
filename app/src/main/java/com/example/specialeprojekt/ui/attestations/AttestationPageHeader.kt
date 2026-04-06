@@ -30,6 +30,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.TextButton
+import com.example.specialeprojekt.data.AttestationData
 import com.example.specialeprojekt.ui.navigation.Route
 
 @Composable
@@ -40,6 +41,8 @@ fun AttestationPageHeader(navController: NavController) {
 
     var showMenu by remember { mutableStateOf(false) }
     var showConfirmDialog by remember { mutableStateOf(false) }
+
+    val removeMessage = if (data.selectedAttestation != null && data.selectedAttestation!!.attestationType == "Legitimationsbevis") "OBS!: Dine andre beviser bliver også fjernet når legitimationsbeviset bliver fjernet." else ""
 
     Row(
         modifier = Modifier
@@ -55,11 +58,13 @@ fun AttestationPageHeader(navController: NavController) {
                 text = "···",
                 modifier = Modifier.clickable { showMenu = !showMenu }
             )
+
             DropdownMenu(
                 expanded = showMenu,
                 onDismissRequest = { showMenu = false }
             ) {
                 DropdownMenuItem(
+
                     text = { Text("Fjern bevis", color = MaterialTheme.colorScheme.error) },
                     onClick = {
                         showMenu = false
@@ -85,11 +90,15 @@ fun AttestationPageHeader(navController: NavController) {
         AlertDialog(
             onDismissRequest = { showConfirmDialog = false },
             title = { Text("Fjern bevis") },
-            text = { Text("Er du sikker på, at du vil fjerne ${data.selectedAttestation?.attestationType}?") },
+            text = { Text("Er du sikker på, at du vil fjerne ${data.selectedAttestation?.attestationType}?\n" + removeMessage) },
             confirmButton = {
                 TextButton(
                     onClick = {
-                        userViewModel.removeAttestation(data.selectedAttestation?.attestationType)
+                        if (data.selectedAttestation!!.attestationType == "Legitimationsbevis") {
+                            userViewModel.attestations = mapOf()
+                        } else {
+                            userViewModel.removeAttestation(data.selectedAttestation?.attestationType)
+                        }
                         showConfirmDialog = false
                         navController.navigate(Route.Main.route) {
                             popUpTo(0)
