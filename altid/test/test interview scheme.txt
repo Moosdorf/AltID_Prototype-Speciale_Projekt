@@ -1,0 +1,21 @@
+Hej "testperson"
+
+Opgaven handler om at teste bruger-funktionaliteter på AltID appen, 
+ydermere vil jeg gerne høre løbende hvad du tror der sker sikkerhedsmæssigt teknisk under grænseoverfladen
+	
+
+- Hvor god føler du at du er til at operere en mobil telefon 1-10
+- Hvad er din tekniske erfaring 1-10
+- Har du hørt om AltID?
+- Ved du hvad AltID er og gør?
+
+
+Hvad er AltID?
+AltID er en digital identitets-tegnebog. 
+
+
+I testen får du min telefon som du skal bruge.
+
+Du kan enten bruge mit pas eller dit eget, intet data bliver gemt eller taget med.
+
+

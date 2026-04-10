@@ -1,0 +1,96 @@
+yee
+
+http://labs.toolness.com/temp/sid/ch13yee.pdf
+
+
+Y1. Least authority by default: Match the most comfortable way to do tasks with the least granting of authority.
+Y2. Consent-based authorization: Grant authority to others in accordance with user actions indicating consent.
+Y3. Revocability:  Offer the user ways to reduce others’ authority to access the user’s resources.
+Y4. Awareness of others' authority: Maintain accurate awareness of others’ authority as relevant to user decisions.
+Y5. Awareness of own authority: Maintain accurate awareness of the user’s own authority to access resources.
+Y6. Trusted path: Protect the user’s channels to agents that manipulate authority on the user’s behalf.
+Y7. Task-relevant security policies: Enable the user to express safe security policies in terms that fit the user’s task.
+Y8. Meaningful distinctions: Draw distinctions among objects and actions along boundaries relevant to the task.
+Y9. Truthful appearances: Present objects and actions using distinguishable, truthful appearances.
+Y10. Clear consequences: Indicate clearly the consequences of decisions that the user is expected to make.
+
+Whitten & Tygar:
+WT1: Users are reliably made aware of the security tasks they need to perform
+WT2: Users are able to figure how to successfully perform those tasks
+WT3: Users don’t make dangerous errors
+WT4: Users are sufficiently comfortable with the interface to continue using it
+
+
+Test 1: Create account
+Y1. Man skal bruge mitid for at oprette en konto, så der er Y1 pga sikkerheden ved at binde en bruger til sin konto sker by default, 
+									gennem MitID som de kender
+Y2. Brugeren gav også konsent til at den måtte gøre det gennem MitID  
+Y5. Ved brugeren hvad de har givet mitid lov til? 
+
+Måske er Y10 ikke helt klargjort.  
+
+Test 2: Obtain PID
+Y1 og Y2. Igen skal brugeren give konsent til at MitID skal bruges for at tilføje et legitimationsbevis. 
+Y4. Hvad ved brugeren at de giver issuer lov til at hente deres data fra et data register? 
+		WUA information? type issuer?
+Y5. Ved brugeren hvem der har udstedt beviset? Tror de på dem? 
+						- er det bare en formodning da de er en del af systemet
+
+
+Test 3: Obtain passport image
+Y9. Man kan se at pas billedet matcher og at der så er data fra ens egen chip der bliver brugt.
+Y10. Ved brugeren hvad passbilledet skal bruges til?
+
+
+Test 4: Show address
+Y8? Brugere skal kun vælge en enkelt attribut. Kender bruger forskel på 1 eller 2 selected attributes? Hvis ja overholdes Y8. 
+Y2. at vise en QR kode med allerede valgte attributter er at give konsent.
+Y10, der er et skilt hvor der står "at man ikke deler ekstra information" 
+	- forstår brugeren skiltet?
+Y7. bruger skal vise en addresse, og de skal naturligt fravælge de rigtige variable.
+Y9. QR kan ikke fakes. 
+
+
+Test 5: Download age-proof
+Y1. Der er by default mindre information end et legitimationsbevis
+Y5? Da de downloader et bevis ned, så har de et katalog af deres beviser. De kan så fjernes igen når brugeren vil.
+		Brugeren ved måske ikke hvilke giver mulighed for hvad eller hvilke der er QEAA, EAA, giver LoA high osv.
+Y3. Ved brugeren at den kan revokes igen? Samme med legitimationsbevis
+Y4. Ved brugeren hvem der har mulighed for at scanne QR? Altså verifiers.
+
+
+------
+Y4. nok på alle hvor man skal dele et bevis. Ved brugeren om modparten må beholde data? Og kan de derefter revoke(Y3) hvis de må?
+Test 6: Vis QR - aldersverifikation
+Y7. Bruger skal vise en alder, som er 18+.
+Y9 måske lidt også, da presentationen ikke kan fakes.
+Y10. Ved brugeren at de ikke viser deres faktiske alder, men at de bare er over 18?
+
+
+Test 7: Verificer identitet til myndighed digitalt
+Y6. Der bruges en officiel side "e-Boks", og der er brokers involveret.
+Y1 og Y2. Brugeren skal give konsent til at "logge" ind på e-boks med deres identitet, og kan ikke gøres anderledens 
+											så det er den naturlige gang
+
+
+Test 8: Bevis alder til vinhandler "legitimationsbevis"?
+Y10, der vises den information de deler og de deler for meget. Så brugeren kan godt se det, men ved de at de ikke bør dele så meget data?
+		- Hvis de virkelig gerne vil have deres vin, er de så ligeglade? "Det er jo bare lidt små data...."
+Y2 De giver konsent hvis de swiper.
+Y6 vil nok ikke overholdes her, men det er kun hvis verifier er kommet igennem screening fra registrar med det her data. 
+						Det ville nok ikke ske i virkeligheden, de ville blive afslået eller bedt om at bruge aldersbevis
+
+
+Test 9: Betal regning til Dansk Fjernvarme
+Meget lig Test 8. 
+
+
+Test 10: Scan bartender QR - aldersbevis
+Y6. overholdes da man kun kan scanne og få requests fra AltID brugere pga certifikater og TL
+Y9. Man kan se hvem det er der giver QR koden, og man kan se det er dem der modtager verifikationen.
+
+
+Test 11: Fjern aldersbevis.
+Y3. Brugeren har mulighed for at fjerne et bevis de tidligere har downloadet og dermed fjerne AltID-appens adgang til det data.
+Y10. Der er en pop op der spørger om de virkelig vil.
+

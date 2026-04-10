@@ -1,0 +1,39 @@
+struktur:
+
+1 Introduction
+
+2 Background
+	Cryptography? - (måske for wsca/wscd og pki) (måske en slags "børne venlig"?)
+	digital wallets
+	EUDIW
+		eIDAS2
+		Security
+	Danish systems
+		NemID->MitID->AltID
+	
+	Usability & Usable Security
+		Digst usability
+		W&T
+		Yee
+
+3 Design
+	AltID prototype
+		How was it made, why is it good enough to imitate real system
+		follows flows? eidas2? 
+		interpretions ok?
+	
+	Usability test 
+		Goals & Target Group
+		All 11 Test scenarios
+
+4. Implementation
+
+5. Methodology
+
+6. Analysis
+
+7. Discussion
+
+(8. Hvis AltID kommer ud kan jeg reflektere over design valg)
+
+8. Conclusion
