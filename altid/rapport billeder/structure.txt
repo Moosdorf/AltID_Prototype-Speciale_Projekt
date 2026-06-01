@@ -8,6 +8,8 @@ struktur:
 	EUDIW
 		eIDAS2
 		Security
+		er der surveilance?
+		security by default og det der fis?
 	Danish systems
 		NemID->MitID->AltID
 	
@@ -15,10 +17,15 @@ struktur:
 		Digst usability
 		W&T
 		Yee
+		Christopher Hass
+		
+
+5. Methodology?
+	Interview of people
 
 3 Design
 	AltID prototype
-		How was it made, why is it good enough to imitate real system
+		how to make it based on sketches, finding requirements, why is it good enough to imitate real system
 		follows flows? eidas2? 
 		interpretions ok?
 	
@@ -27,13 +34,24 @@ struktur:
 		All 11 Test scenarios
 
 4. Implementation
+	Homemade prototype (kotlin, android studios, minimal api...)
+		Design decisions i had to make (buttons, flow that was not configured)
+	Flow of app
+	minimalistic (UI shell with no cryptography)
 
-5. Methodology
+
 
 6. Analysis
+	The interview questions answered 
+		Usable Security & Usability
+	Own analysis of program using theories
 
 7. Discussion
 
-(8. Hvis AltID kommer ud kan jeg reflektere over design valg)
+8. Reflection 
+	small sample size
+	target demographic very large
+	
+	
 
-8. Conclusion
+9. Conclusion

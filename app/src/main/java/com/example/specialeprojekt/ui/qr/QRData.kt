@@ -20,12 +20,11 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 
 class QRData : ViewModel() {
-    var QRString by mutableStateOf<String?>(null)
+    var qRString by mutableStateOf<String?>(null)
 
 }
 
 // https://www.geeksforgeeks.org/kotlin/generate-qr-code-in-android-using-kotlin/
-
 fun genQRCode(message: String, size: Int = 512): Bitmap { // returns Bitmap
     val bitMatrix = MultiFormatWriter().encode(message, BarcodeFormat.QR_CODE, size, size)
     val bitmap = createBitmap(size, size, Bitmap.Config.RGB_565)

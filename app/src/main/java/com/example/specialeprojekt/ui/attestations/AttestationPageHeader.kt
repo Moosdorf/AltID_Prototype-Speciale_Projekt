@@ -105,12 +105,12 @@ fun AttestationPageHeader(navController: NavController) {
                         }
                     }
                 ) {
-                    Text("Ja", color = MaterialTheme.colorScheme.error)
+                    Text("Ja")
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showConfirmDialog = false }) {
-                    Text("Nej")
+                    Text("Nej", color = MaterialTheme.colorScheme.error)
                 }
             }
         )

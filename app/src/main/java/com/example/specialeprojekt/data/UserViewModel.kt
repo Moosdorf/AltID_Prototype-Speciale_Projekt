@@ -11,6 +11,19 @@ class UserViewModel : ViewModel() {
     var attestations by mutableStateOf<Map<String, AttestationData>>(mapOf())
     var passportPhoto: android.graphics.Bitmap? by mutableStateOf(null)
 
+    fun reissueAttestation() {
+        attestations.forEach { (k, v) ->
+            if (v.uses >= 30) {
+                removeAttestation(k)
+                if (k == "Aldersbevis") {
+                    addAttestation(AldersBevis())
+                } else {
+                    addAttestation(LegitimationsBevis())
+                }
+            }
+        }
+    }
+
     fun addAttestation(attestation: AttestationData) {
         if (attestations.values.contains(attestation)) return
 

@@ -14,6 +14,7 @@ abstract class AttestationData {
     abstract val icon : ImageVector
     abstract val backGroundColor : Color
     abstract val attributes : Map<String, String>
+    abstract var uses : Int
 
 }
 
@@ -24,7 +25,8 @@ data class AldersBevis(
     override val backGroundColor: Color = Color(0xFF28BD77),
     override val attributes: Map<String, String> = mapOf(
         "Alder" to "44"
-    )
+    ),
+    override var uses : Int = 0
 ) : AttestationData()
 
 data class LegitimationsBevis(
@@ -39,7 +41,8 @@ data class LegitimationsBevis(
         "CPR" to "1602824233",
         "Nationalitet" to "Dansk",
         "Adresse" to "Nørrebrogade 42, 2200 København N",
-    )
+    ),
+    override var uses : Int = 0
 ) : AttestationData()
 
 data class SelectableAttribute(

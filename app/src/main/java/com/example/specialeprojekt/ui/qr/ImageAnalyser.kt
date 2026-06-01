@@ -22,7 +22,7 @@ class ImageAnalyser(private val onQrScanned: (String) -> Unit) : ImageAnalysis.A
 
         scanner.process(image)
             .addOnSuccessListener { barcodes ->
-                barcodes.firstOrNull()?.rawValue?.let { image -> onQrScanned(image) }
+                barcodes.firstOrNull()?.rawValue?.let { image -> onQrScanned(image) } // find plaintext from image (onqrscan will update viewmodel and navigate)
             }
             .addOnCompleteListener {
                 imageProxy.close()

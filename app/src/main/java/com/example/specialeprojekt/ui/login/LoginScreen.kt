@@ -1,5 +1,6 @@
 package com.example.specialeprojekt.ui.login
 
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -26,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -80,6 +82,7 @@ fun LoginScreen(navController: NavController) {
 
                 Button(
                     onClick = {
+                        Log.e("mine", username)
                         userViewModel.username = username
                         loginState.currentState = LoginState.PID
                         navController.navigate(Route.MitIDAuth.route) {
@@ -96,6 +99,7 @@ fun LoginScreen(navController: NavController) {
                 }
             }
             LoginState.PID -> {
+                Text("Du har nu oprettet en Konto med AltID.", fontSize = 16.sp)
                 Image(
                     painter = painterResource(R.drawable.digst),
                     contentDescription = "digst logo",
@@ -103,11 +107,11 @@ fun LoginScreen(navController: NavController) {
                 )
 
                 Text("Tilføj Legitimationsbevis", fontSize = 24.sp)
-                Text("For at bruge AltID-appen skal du tilføje et legitimationsbevis.", fontSize = 14.sp)
+                Spacer(modifier = Modifier.width(12.dp))
+                Text("Gør AltID-appen klar ved at tilføje et legitimationsbevis.", fontSize = 14.sp)
 
                 Button(
                     onClick = {
-                        userViewModel.username = username
                         loginState.currentState = LoginState.PASSPORT
                         navController.navigate(Route.MitIDAuth.route) {
                             mitIDRequestViewModel.path = Route.Login.route
@@ -129,12 +133,11 @@ fun LoginScreen(navController: NavController) {
                     modifier = Modifier.height(200.dp).width(200.dp)
                 )
 
-                Text("Tilføj pasbillede", fontSize = 24.sp)
+                Text("Din AltID konto er nu klar til brug!\nTilføj pasbillede", fontSize = 24.sp)
                 Text("Det er ikke et krav at tilføje.", fontSize = 14.sp)
                 Button(
                     onClick = {
-                        userViewModel.username = username
-                        loginState.currentState = LoginState.PASSPORT
+                        loginState.currentState = LoginState.CREATE
                         navController.navigate(Route.NFCScan.route)
                     },
                     shape = RoundedCornerShape(8.dp),
@@ -144,7 +147,10 @@ fun LoginScreen(navController: NavController) {
                 ) {
                     Text("Tilføj Pasbillede")
                 }
-                Text("Tilføj senere.", modifier = Modifier.clickable{navController.navigate(Route.Main.route)})
+                Text("Tilføj senere.", modifier = Modifier.clickable{
+                    navController.navigate(Route.Main.route)
+                    loginState.currentState = LoginState.CREATE
+                                                                    }, color = Color.Blue)
             }
         }
 

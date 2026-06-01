@@ -70,12 +70,13 @@ fun QRPage(navController: NavController) {
                         val preview = Preview.Builder().build().also {
                             it.surfaceProvider = previewView.surfaceProvider
                         }
+
                         val analyzer = ImageAnalysis.Builder().build().also {
                             it.setAnalyzer(Executors.newSingleThreadExecutor(), ImageAnalyser({ e ->
                                 qrScanned = true
                                 navController.navigate(Route.Request.route)
-                                qRModel.QRString = e
-                        }))
+                                qRModel.qRString = e
+                            }))
                         }
                         // check if unbind works when nothing is bound already. otherwise i need to use this whenever there is something bound.
                         cameraProvider.unbindAll()

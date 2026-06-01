@@ -1,5 +1,6 @@
 package com.example.specialeprojekt.ui.home
 
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -72,6 +73,7 @@ fun MainPage(navController: NavController) {
 
         PassportImage(navController)
         Spacer(modifier = Modifier.height(32.dp))
+        Log.e("mine",userModel.username)
         Text(text = userModel.username)
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -102,9 +104,9 @@ fun MainPage(navController: NavController) {
                             pagerState.animateScrollToPage(pagerState.currentPage - 1)
                     }
                 })
-            Button(onClick = { navController.navigate(Route.Attestation.route) }) {
-                Text(attestations[pagerState.currentPage].attestationType)
-            }
+
+            Text(attestations[pagerState.currentPage].attestationType)
+
 
             Icon(
                 imageVector = Icons.Filled.ArrowCircleRight,

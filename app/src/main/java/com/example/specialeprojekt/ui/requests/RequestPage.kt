@@ -1,6 +1,5 @@
 package com.example.specialeprojekt.ui.requests
 
-import android.R
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -47,10 +46,11 @@ fun RequestPage(navController: NavController) {
     val context = LocalContext.current
     val userModel: UserViewModel = viewModel(context as ComponentActivity)
     val qRModel: QRData = viewModel(context)
-    val data = "" + qRModel.QRString
+    val data = "" + qRModel.qRString
 
     val request = Gson().fromJson(data, RequestData::class.java)
     var isShared by remember { mutableStateOf(false) }
+    val attestation = userModel.attestations[request.attestationType]
 
     Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
         Box(
@@ -92,7 +92,6 @@ fun RequestPage(navController: NavController) {
                     .padding(24.dp)
             ) {
                 Column {
-                    val attestation = userModel.attestations[request.attestationType]
                     if (attestation != null) {
                         when (attestation) {
                             is LegitimationsBevis -> {
@@ -162,6 +161,8 @@ fun RequestPage(navController: NavController) {
             } else {
                 Swiper {
                     isShared = true
+                    attestation?.uses += 1
+                    userModel.reissueAttestation()
                 }
             }
         }
